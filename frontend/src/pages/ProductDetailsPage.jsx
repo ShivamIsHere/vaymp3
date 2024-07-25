@@ -35,7 +35,7 @@ const ProductDetailsPage = () => {
             </>
           )
         }
-        <Footer />
+        {/* <Footer /> */}
     </div>
   );
 };

@@ -96,10 +96,10 @@ const Categories = () => {
       
                 }}}>
                   <div className="overflow-hidden relative">
-                    <h5 className="leading-1.3 absolute top-0 left-0 right-0 text-center font-bold text-black shadow p-4 text-[10px] sm:text-[15px] md:text-[24px]">{item.title}</h5>
+                    <h5 className="leading-1.3 absolute top-0 left-0 right-0 text-center font-bold text-black shadow p-4 text-[13px] sm:text-[15px] md:text-[24px]">{item.title}</h5>
                     <img
                       src={item.image_Url}
-                      className="w-full lg:w-70% h-auto mt-14 sm:mt-24 lg:rounded-full lg:border lg:border-gray-300"
+                      className="w-full lg:w-70% h-auto mt-24 lg:rounded-full lg:border lg:border-gray-300"
                       alt={item.title}
                     />
                   </div>

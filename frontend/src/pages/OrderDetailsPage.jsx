@@ -8,7 +8,7 @@ const OrderDetailsPage = () => {
     <div>
         <Header />
         <UserOrderDetails />
-        <Footer />
+        {/* <Footer /> */}
     </div>
   )
 }

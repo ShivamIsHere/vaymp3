@@ -95,7 +95,7 @@ const Address = () => {
 <div className="w-full px-5">
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
-            <div className="bg-white w-full h-[95%] max-w-xl p-4 md:p-8 rounded-lg shadow-lg relative overflow-y-scroll">
+            <div className="bg-white w-full max-w-xl p-4 md:p-8 rounded-lg shadow-lg relative overflow-y-scroll">
               <div className="flex justify-end">
               <button
                 className="text-red-500 hover:text-red-600 font-bold text-xl focus:outline-none"
