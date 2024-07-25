@@ -29,6 +29,7 @@ import {
   footwearSubCategories
 } from "../static/data"; // Assuming data is imported correctly
 import ClipLoader from "react-spinners/ClipLoader";
+import BasicPagination from "./BasicPagination";
 
 const SearchResults = () => {
   const { query } = useParams();
@@ -150,7 +151,7 @@ const SearchResults = () => {
 
   useEffect(() => {
     updateURLParams(filters);
-  }, [filters, sortBy,currentPage,query]);
+  }, [filters, sortBy,query]);
 
 
 
@@ -495,8 +496,13 @@ console.log("hfejshmehgmfe,")
               <h1 className="text-center text-xl font-semibold text-gray-700 mt-4 mb-1">
                 No Product Found... Here are some suggested Products
               </h1>
+
             )}{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
+            <h1 className="text-xl font-semibold mb-4">Search Results for: {query}</h1>
+        <div className="flex flex-col md:flex-row">
+          {/* Add your filters and sorting here */}
+        </div>
             {isValid===true&&<div className="flex -mb-3 sticky top-28 z-10 mt-2">
               <div className="w-1/2 p-0 m-0">
                 <button
@@ -971,18 +977,13 @@ console.log("hfejshmehgmfe,")
             </div>
 
           {/* Pagination for Large Screens */}
-            <div className="mt-4 justify-center hidden md:flex">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  className={`px-4 py-2 border mx-1 ${currentPage === index + 1 ? 'bg-blue-500 text-white' : ''}`}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          </div>
+            <div className="flex flex-col flex-1 p-4">
+        
+        <div className="mt-4 justify-center hidden md:flex">
+          <BasicPagination count={totalPages} page={currentPage} onChange={handlePageChange} />
+        </div>
+      </div>
+    </div>
           {/* Sort Drawer */}
           {sortDrawerOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-end">

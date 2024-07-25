@@ -18,6 +18,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/actions/wishlist";
+import { RiShareForwardLine } from "react-icons/ri";
 import { BsShop } from "react-icons/bs";
 import { addTocart, updateTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
@@ -41,7 +42,13 @@ const ProductDetails =  ({ data }) => {
   const handleMouseEnter = () => {
     setShowDescription(true);
   };
-
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      toast.success('Link has been copied to clipboard');
+    }).catch((error) => {
+      toast.error('Failed to copy link');
+    });
+  };
   const handleMouseLeave = () => {
     setShowDescription(false);
   };
@@ -220,13 +227,43 @@ const ProductDetails =  ({ data }) => {
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full sm:py-5 lg:py-10">
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%]">
+              <div className="w-full 800px:w-[50%] relative">
                 <img
                   src={`${data && data.images[select]?.url}`}
                   alt=""
                   className="w-full sm:w-[80%] mx-auto border border-gray-300 m-3 p-1 rounded"
                   style={{ transitionDelay: "800ms" }}
                 />
+                <div className="absolute top-2 right-2">
+                  {click ? (
+                    <AiFillHeart
+                      size={30}
+                      color="red"
+                      className="ml-2"
+                      title="Remove from wishlist"
+                      onClick={() => {
+                        removeFromWishlistHandler(data);
+                      }}
+                    />
+                  ) : (
+                    <AiOutlineHeart
+                      size={34}
+                      className="ml-2 text-blue-400 "                      
+                      title="Add to wishlist"
+                      onClick={() => {
+                        addToWishlistHandler(data);
+                      }}
+                    />
+                  )}
+                  
+                  <RiShareForwardLine
+                      size={34}
+                      className="ml-2 text-blue-400"
+                      title="Share this product"
+                      onClick={copyToClipboard}
+                    />
+                  
+                </div>
                 <div className="w-full flex p-2 py-0 lg:pl-12">
                   {data &&
                     data.images.map((i, index) => (
