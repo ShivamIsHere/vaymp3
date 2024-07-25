@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import styles from "../../styles/styles";
 import { categoriesData, productData } from "../../static/data";
@@ -7,7 +8,7 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { FiChevronDown } from "react-icons/fi";
-import { Link, useParams,useLocation,useNavigate } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
@@ -46,7 +47,7 @@ const Header = ({ activeHeading }) => {
   const getFirstLetter = (name) => {
     if (!name) return '';
     return name.charAt(0).toUpperCase();
-}
+  }
   const isActive = (path) => location.pathname === path;
   const [totalCount, setTotalCount] = useState(0);
   useEffect(() => {
@@ -92,34 +93,34 @@ const Header = ({ activeHeading }) => {
     setSearchTerm(term);
 
 
-    
-//     let totalCount = 0;
-// // console.log("cart",cart)
-//     cart.forEach(item => {
-//       item.stock.forEach(stockItem => {
-//         if (stockItem.isSelected) {
-//           totalCount += 1;
-//         }
-//       });
-//     });
-    
-//     console.log("totalCount",cart.length);
+
+    //     let totalCount = 0;
+    // // console.log("cart",cart)
+    //     cart.forEach(item => {
+    //       item.stock.forEach(stockItem => {
+    //         if (stockItem.isSelected) {
+    //           totalCount += 1;
+    //         }
+    //       });
+    //     });
+
+    //     console.log("totalCount",cart.length);
 
     // console.log("allllll",term,allProducts)
-//  const filteredProducts =
-//       allProducts &&
-//       allProducts.filter((product) => {
-//         console.log("kkkk",product.occasion.toLowerCase)
-//         let p1 =
-//           product.name.toLowerCase().includes(term.toLowerCase()) ||
-//           product.category.toLowerCase().includes(term.toLowerCase()) ||
-//           product.occasion.toLowerCase().includes(term.toLowerCase()) ||
-//           product.tags.toLowerCase().includes(term.toLowerCase());
-//         return p1;
-//         // return true
-//       });
-      console.log("allllll",cart)
-      
+    //  const filteredProducts =
+    //       allProducts &&
+    //       allProducts.filter((product) => {
+    //         console.log("kkkk",product.occasion.toLowerCase)
+    //         let p1 =
+    //           product.name.toLowerCase().includes(term.toLowerCase()) ||
+    //           product.category.toLowerCase().includes(term.toLowerCase()) ||
+    //           product.occasion.toLowerCase().includes(term.toLowerCase()) ||
+    //           product.tags.toLowerCase().includes(term.toLowerCase());
+    //         return p1;
+    //         // return true
+    //       });
+    console.log("allllll", cart)
+
 
     const filteredProducts =
       allProducts &&
@@ -153,7 +154,6 @@ const Header = ({ activeHeading }) => {
   const handleSearchSubmit = (e) => {
     if (e.key === "Enter" && searchTerm) {
       navigate(`/search/${searchTerm}`);
-      window.location.reload(true);
       setSearchTerm("");
       setSearchData(null);
     }
@@ -263,7 +263,7 @@ const Header = ({ activeHeading }) => {
               <AiOutlineSearch
                 size={30}
                 className="absolute right-2 top-1.5 cursor-pointer" onClick={handleSearchClick}
-                />
+              />
               {searchData && searchData.length !== 0 ? (
                 <div className="absolute min-h-[5vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                   {searchData &&
@@ -296,9 +296,8 @@ const Header = ({ activeHeading }) => {
           </div>
         </div>
         <div
-          className={`${
-            active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-          } transition hidden 800px:flex items-center justify-between w-full bg-[#3321c8] h-[60px]`}
+          className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
+            } transition hidden 800px:flex items-center justify-between w-full bg-[#3321c8] h-[60px]`}
         >
           <div
             className={`${styles.section} relative ${styles.noramlFlex} justify-between `}
@@ -346,8 +345,7 @@ const Header = ({ activeHeading }) => {
               <div className={`${styles.noramlFlex}`}>
                 <div
                   className="relative cursor-pointer mr-[15px]"
-                  onClick={() => 
-                    {setOpenCart(true)}
+                  onClick={() => { setOpenCart(true) }
                   }
                 >
                   <AiOutlineShoppingCart
@@ -361,7 +359,7 @@ const Header = ({ activeHeading }) => {
               </div>
 
               <div className={`${styles.noramlFlex}`}>
-              <div
+                <div
                   className="container mx-auto bg-blue p-2 rounded-lg shadow-lg flex items-center justify-between cursor-pointer"
                   onMouseEnter={() => setIsDropdownOpen(true)}
                   onMouseLeave={() => setIsDropdownOpen(false)}
@@ -451,13 +449,13 @@ const Header = ({ activeHeading }) => {
       </div>
 
 
-      <div className="mt-[88px] bg-white w-full md:block hidden">
+      <div className="mt-[88px] bg-blue-100 w-full md:block hidden">
         <div className="container mx-auto p-4"></div>
       </div>
 
       {/* mobile header */}
       <div
-        className={`sticky top-0 z-[20] bg-blue-200 w-full shadow-sm 800px:hidden`}
+        className={`sticky top-0 z-[20] bg-white w-full shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>
@@ -481,7 +479,7 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           <div>
-          <div className="flex items-center justify-start space-x-6">
+            <div className="flex items-center justify-start space-x-6">
               <div className="relative" onClick={() => setOpenWishlist(true)}>
                 <AiOutlineHeart size={30} />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
@@ -510,8 +508,8 @@ const Header = ({ activeHeading }) => {
           <div
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
-<div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-30 overflow-y-scroll header-sidebar">              
-<div className="w-full justify-between flex pr-3">
+            <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-30 overflow-y-scroll header-sidebar">
+              <div className="w-full justify-between flex pr-3">
                 <div>
                   {/* <div
                     className="relative mr-[15px]"
@@ -536,85 +534,85 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <div>
                     <Link to="/profile">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200 border-[3px] border-[#0eae88]">
-                      <div className="w-[60px] h-[60px] flex items-center justify-center text-blue-300 text-3xl font-bold">
-                        {getFirstLetter(user?.name)}
-                      </div>          
-                    </div>
-                      
+                      <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200 border-[3px] border-[#0eae88]">
+                        <div className="w-[60px] h-[60px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+                          {getFirstLetter(user?.name)}
+                        </div>
+                      </div>
+
                     </Link>
                   </div>
                 ) : (
                   <>
-                  <div className="inline-block bg-gray-200 px-4 py-2 rounded-md shadow-md cursor-pointer" >
-                    <Link
-                      to="/login"
-                      className="text-[18px] pr-[10px] text-[#000000b7]"
-                    >
-                      Login /
-                    </Link>
-                    <Link
-                      to="/sign-up"
-                      className="text-[18px] text-[#000000b7]"
-                    >
-                      Sign up
-                    </Link>
+                    <div className="inline-block bg-gray-200 px-4 py-2 rounded-md shadow-md cursor-pointer" >
+                      <Link
+                        to="/login"
+                        className="text-[18px] pr-[10px] text-[#000000b7]"
+                      >
+                        Login /
+                      </Link>
+                      <Link
+                        to="/sign-up"
+                        className="text-[18px] text-[#000000b7]"
+                      >
+                        Sign up
+                      </Link>
                     </div>
                   </>
                 )}
               </div>
- <br></br>
+              <br></br>
               {/* navbar */}
               <Navbar active={activeHeading} />
-  
+
               <div className="flex flex-col">
-              <Link
-                to="/profile"
-                className={` ${isActive('/profile') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
-              >
-                Profile
-              </Link>
-              <Link
-                to='/orders'
-                className={` ${isActive('/orders')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                <Link
+                  to="/profile"
+                  className={` ${isActive('/profile') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
-                Orders
+                  Profile
                 </Link>
-              <Link
-                to='/Address'
-                className={` ${isActive('/Address')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                <Link
+                  to='/orders'
+                  className={` ${isActive('/orders') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
-                Address
-              </Link>
-              <Link
-                to='/inbox'
-                className={` ${isActive('/inbox')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                  Orders
+                </Link>
+                <Link
+                  to='/Address'
+                  className={` ${isActive('/Address') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
-                Inbox
-              </Link>
-              <Link
-                to='/Refund'
-                className={` ${isActive('/Refund')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                  Address
+                </Link>
+                <Link
+                  to='/inbox'
+                  className={` ${isActive('/inbox') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
-                Refund
-              </Link>
-              <Link
-                to='/Track'
-                className={` ${isActive('/Track')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                  Inbox
+                </Link>
+                <Link
+                  to='/Refund'
+                  className={` ${isActive('/Refund') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
-                TrackOrder
-              </Link>
-               </div>
-              <div className={`${styles.button} ml-4 !rounded-[4px]`}>
-                <Link to="/shop-create">
-                  <h1 className="text-[#fff] flex items-center">
-                    Become Seller <IoIosArrowForward className="ml-1" />
-                  </h1>
+                  Refund
+                </Link>
+                <Link
+                  to='/Track'
+                  className={` ${isActive('/Track') ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                >
+                  TrackOrder
                 </Link>
               </div>
+               <div className={`${styles.button} ml-12`}>
+              <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
+                <h1 className="text-[#fff] flex items-center">
+                  {isSeller ? "Go Dashboard" : "Become Seller"}{" "}
+                </h1>
+              </Link>
+            </div>
               <br />
               <br />
-              
+
             </div>
           </div>
         )}
@@ -629,8 +627,8 @@ const Header = ({ activeHeading }) => {
             value={mobileSearchTerm}
             onChange={handlemobileSearchChange}
             onKeyDown={handleMobileSearchSubmit}
-            className="h-[40px] w-[98%] px-2  border-[1px] rounded-md bg-blue-50 mb-3 ml-1"
-            />
+            className="h-[40px] w-full px-2  border-[1px] rounded-md bg-blue-50 mb-3"
+          />
           <AiOutlineSearch
             size={30}
             className="absolute right-2 top-1.5 cursor-pointer" onClick={handleMobileSearchClick}

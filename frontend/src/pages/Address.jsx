@@ -71,6 +71,7 @@ const Address = () => {
           }
         )
       );
+      
       setOpen(false);
       setName(""); // Reset name state
       setPhoneNumber("");
@@ -91,12 +92,12 @@ const Address = () => {
 
   return (
 <>
-{/* <Header/>     */}
+<Header/>    
 <div className="w-full px-5">
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
-            <div className="bg-white w-full max-w-xl p-4 md:p-8 rounded-lg shadow-lg relative overflow-y-scroll">
-              <div className="flex justify-end">
+         <div className="bg-white w-full sm:max-w-full md:max-w-xl p-4 sm:p-4 md:p-8 rounded-lg shadow-lg relative max-h-screen overflow-y-auto">
+            <div className="flex justify-end">
               <button
                 className="text-red-500 hover:text-red-600 font-bold text-xl focus:outline-none"
                 onClick={() => setOpen(false)}
@@ -127,7 +128,7 @@ const Address = () => {
                 />
               </div>
               <div>
-                <label className="block pb-2">Landmark</label>
+                <label className="block pb-2">Address 2</label>
                 <input
                   type="text"
                   className="border h-[40px] rounded-[5px] w-full"
@@ -136,21 +137,12 @@ const Address = () => {
                 />
               </div>
               <div>
-                <label className="block pb-2"> LandMark</label>
+                <label className="block pb-2">LandMark</label>
                 <input
                   type="text"
                   className="border h-[40px] rounded-[5px] w-full"
                   value={landmark}
                   onChange={(e) => setLandMark(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block pb-2"> Alt Phone Number</label>
-                <input
-                  type="number"
-                  className="border h-[40px] rounded-[5px] w-full"
-                  value={altphoneNumber}
-                  onChange={(e) => setAltPhoneNumber(e.target.value)}
                 />
               </div>
               <div>
@@ -166,11 +158,21 @@ const Address = () => {
               <div>
                 <label className="block pb-2">Phone Number</label>
                 <input
-                  type="text"
+                  type="number"
                   className="border h-[40px] rounded-[5px] w-full"
                   required
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block pb-2">Alt Phone Number</label>
+                <input
+                  type="number"
+                  className="border h-[40px] rounded-[5px] w-full"
+                  required
+                  value={altphoneNumber}
+                  onChange={(e) => setAltPhoneNumber(e.target.value)}
                 />
               </div>
               <div>
@@ -236,8 +238,8 @@ const Address = () => {
               <p>{item.address2}</p>
               <p>{item.phoneNumber}</p>
               <p>{item.altphoneNumber}</p>
-              <p>{item.landmark}</p>
               <p>{item.city}</p>
+              <p>{item.landmark}</p>
               <p>{item.zipCode}</p>
               <p>{item.name}</p> {/* Display the name */}
             </div>
@@ -246,7 +248,7 @@ const Address = () => {
       ))}
       {user && user.addresses.length === 0 && (
         <h5 className="text-center pt-8 text-[18px]">
-          You do not have any saved address!
+          You do not have any saved addresses!
         </h5>
       )}
     </div>

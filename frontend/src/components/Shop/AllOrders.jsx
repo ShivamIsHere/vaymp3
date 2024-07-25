@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
@@ -6,7 +7,7 @@ import {
     AiOutlineDelete
   } from "react-icons/ai";
 import { server } from "../../server";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DataGrid } from "@material-ui/data-grid";
 import { BsPencil } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
@@ -26,6 +27,8 @@ const AllOrders = () => {
   const dispatch = useDispatch();
   const [kuchvi, setkuchvi] = useState([]);
   const [rows, setRows] = useState([]);
+  const navigate = useNavigate();
+  
   useEffect(() => {
     axios
       .get(`${server}/kuchvi/get-all-admin-kuchvi-request`, {
@@ -43,7 +46,7 @@ const AllOrders = () => {
 
 
   const columns = [
-    { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    // { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
     {
       field: "image",
       headerName: "Image",
@@ -67,7 +70,7 @@ const AllOrders = () => {
     },
     {
       field: "status",
-      headerName: "Status999",
+      headerName: "Status",
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
@@ -147,8 +150,9 @@ const AllOrders = () => {
     updateRows();
   }, [kuchvi, seller._id]);
 
-
-
+  const handleRowClick = (params) => {
+    navigate(`/order/${params.row.kuchviId}`);
+  };
   
   return (
     <div className="w-full flex items-center pt-5 justify-center">
@@ -159,6 +163,7 @@ const AllOrders = () => {
           pageSize={50}
           disableSelectionOnClick
           autoHeight
+          onRowClick={handleRowClick}
         />
       </div>
       {/* {open && (

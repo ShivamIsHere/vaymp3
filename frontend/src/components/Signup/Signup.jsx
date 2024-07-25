@@ -53,7 +53,11 @@ const Singup = () => {
   };
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
-    setError(""); 
+    setError("");
+  };
+
+  const handleEmailBlur = () => {
+    setEmail(email.toLowerCase());
   };
 
   return (
@@ -66,7 +70,7 @@ const Singup = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-          
+
             <div>
               <label
                 htmlFor="email"
@@ -81,11 +85,11 @@ const Singup = () => {
                   autoComplete="name"
                   required
                   value={name}
-// onChange={(e) => setName(e.target.value)}
-onChange={(e) => {
-  setName(e.target.value);
-  setError("");
-}}                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  // onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setError("");
+                  }} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -104,11 +108,12 @@ onChange={(e) => {
                   autoComplete="email"
                   required
                   value={email}
-// onChange={(e) => setEmail(e.target.value)} 
-onChange={handleInputChange(setEmail)}  // name m jo onchange laga hai wo aur ye same kaam kar raha this is shotcut that is in detail for understanding.                  
-className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  // onChange={(e) => setEmail(e.target.value)} 
+                  onChange={handleInputChange(setEmail)}  // name m jo onchange laga hai wo aur ye same kaam kar raha this is shotcut that is in detail for understanding.  
+                  onBlur={handleEmailBlur}                
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                 {error === "User already exists!" && (
+                {error === "User already exists!" && (
                   <div className="text-red-600 text-sm mt-1">{error}</div>
 
                 )}
@@ -129,8 +134,8 @@ className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded
                   autoComplete="current-password"
                   required
                   value={password}
-// onChange={(e) => setPassword(e.target.value)}
-onChange={handleInputChange(setPassword)}                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  // onChange={(e) => setPassword(e.target.value)}
+                  onChange={handleInputChange(setPassword)} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {visible ? (
                   <AiOutlineEye
@@ -154,7 +159,7 @@ onChange={handleInputChange(setPassword)}                  className="appearance
                 className="block text-sm font-medium text-gray-700"
               ></label>
               <div className="w-[50px] h-[50px] mt-2  flex items-center justify-center rounded-full bg-slate-200">
-              <FaUserAlt className="h-8 w-8 text-blue-300" />
+                <FaUserAlt className="h-8 w-8 text-blue-300" />
 
                 {/* <label
                   htmlFor="file-input"
@@ -171,39 +176,39 @@ onChange={handleInputChange(setPassword)}                  className="appearance
                   />
                 </label> */}
               </div>
-              {(error !=="User already exists!") && (error !=="Missing required parameter - file") && ( 
-                                <div className="text-red-600 text-sm mt-1">{error}</div>
+              {(error !== "User already exists!") && (error !== "Missing required parameter - file") && (
+                <div className="text-red-600 text-sm mt-1">{error}</div>
 
-                )}
+              )}
             </div>
 
             <div>
-            <div>
-              {loading ? (
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <FidgetSpinner
-                    height={50}
-                    width={50}
-                    backgroundColor="#2563EB"
-                    ballColors="white"
-                    ariaLabel="circles-loading"
-                  />
-                </div>
-              ) : (
-              <button
-                type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Submit
-              </button>
-              )}
+              <div>
+                {loading ? (
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FidgetSpinner
+                      height={50}
+                      width={50}
+                      backgroundColor="#2563EB"
+                      ballColors="white"
+                      ariaLabel="circles-loading"
+                    />
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  >
+                    Submit
+                  </button>
+                )}
               </div>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>

@@ -4,8 +4,6 @@ import {
   AiOutlineCamera,
   AiOutlineDelete,
 } from "react-icons/ai";
-import OrderCard from "./OrderCard";
-
 // import { useDispatch, useSelector } from "react-redux";
 import { server } from "../../server";
 import styles from "../../styles/styles";
@@ -14,7 +12,7 @@ import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { MdTrackChanges } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-
+import { Oval } from 'react-loader-spinner';
 import { RxCross1 } from "react-icons/rx";
 import {
   deleteUserAddress,
@@ -27,8 +25,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllOrdersOfUser } from "../../redux/actions/order";
-import AllOrdersComponent from '../Shop/AllOrders';
-
+import OrderCard from "./OrderCard";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -56,6 +53,10 @@ const ProfileContent = ({ active }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateUserInformation(name, email, phoneNumber, password));
+  };
+
+  const handleEmailBlur = () => {
+    setEmail(email.toLowerCase());
   };
 
   // const handleImage = async (e) => {
@@ -132,6 +133,7 @@ const ProfileContent = ({ active }) => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={handleEmailBlur}
                   />
                 </div>
               </div>
@@ -208,18 +210,17 @@ const ProfileContent = ({ active }) => {
   );
 };
 
+
 const AllOrders = () => {
   const { user } = useSelector((state) => state.user);
-  console.log("vvvvvvvvvvvvvvvvvvvv",user)
-  const { orders } = useSelector((state) => state.order);
-  // const {allProducts,isLoading} = useSelector((state) => state.products);
-  // const [orderProduct, setorderProduct] = useState([]);
+  const { orders,isLoading } = useSelector((state) => state.order);
 
   const dispatch = useDispatch();
   const [kuchvi, setkuchvi] = useState([]);
   const [rows, setRows] = useState([]);
   console.log("order 97", orders);
-  
+
+
   useEffect(() => {
     if (user && user._id) {
       dispatch(getAllOrdersOfUser(user._id));
@@ -227,6 +228,8 @@ const AllOrders = () => {
   }, [dispatch,user]);
 
 
+
+  
   useEffect(() => {
     axios
       .get(`${server}/kuchvi/get-all-admin-kuchvi-request`, {
@@ -242,75 +245,7 @@ const AllOrders = () => {
       });
   }, []);
 
-  const columns = [
-    { 
-      field: "image", 
-      headerName: "Product Image", 
-      minWidth: 180, 
-      flex: 0.7,
-      renderCell: (params) => {
-        return (
-          <Link to={`/product/${params.id}`}>
-            <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
-          </Link>
-        );
-      }
-    },
-    {
-      field: "orderid",
-      headerName: "order id",
-      type: "number",
-      minWidth: 260,
-      flex: 0.7,
-    },
-    {
-      field: "status",
-      headerName: "Status9999",
-      minWidth: 180,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Price",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.row?.kuchviId}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      }
-    },
-
-  ]
+  
   useEffect(() => {
 
     const updateRows = () => {
@@ -319,11 +254,11 @@ const AllOrders = () => {
       kuchvi.forEach((val,ind) => {
         if (val.userId === user._id) {
           newRows.push({
-            id: ind, // Ensure the unique ID for DataGrid is unique
+            id: ind, 
             orderid: val.orderId,
             productid: val.productId,
             size: val.size,
-            image: val.img, // Replace with actual image URL if available
+            image: val.img, 
             itemsQty: 1,
             total: "Rs " + val.markedPrice,
             status: val.status,
@@ -353,22 +288,24 @@ const AllOrders = () => {
   // const row = [];
   
 
-
-  console.log("klklklkllk????????",kuchvi );
-  console.log("hhhhhhhhhhhhhhhrows555",rows );
-
-
-return (
-  <div className="pl-8 pt-1">
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      pageSize={50}
-      disableSelectionOnClick
-      autoHeight
-    /> 
-  </div>
-);
+    return (
+      <>
+     
+        {isLoading ? (
+          // <div className="loading">Loading..</div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <Oval color="#00BFFF" height={80} width={80} />
+        </div>
+        ) : (
+          <div className="">
+            {rows.map((row) => (
+              <OrderCard key={row.id} order={row} />
+            ))}
+          </div>
+        )}
+     
+      </>
+    );
 };
 
 const AllRefundOrders = () => {
@@ -690,7 +627,7 @@ const Address = () => {
 <div className="w-full px-5">
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
-          <div className="bg-white w-full max-w-xl p-4 md:p-8 rounded-lg shadow-lg relative overflow-y-scroll">
+        <div className="bg-white w-full sm:max-w-full md:max-w-xl p-4 sm:p-4 md:p-8 rounded-lg shadow-lg relative max-h-screen overflow-y-auto">
             <div className="flex justify-end">
               <button
                 className="text-red-500 hover:text-red-600 font-bold text-xl focus:outline-none"

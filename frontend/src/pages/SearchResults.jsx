@@ -491,8 +491,11 @@ console.log("hfejshmehgmfe,")
         <div className="w-full">
           <Header activeHeading={2} />
           <div className={`${styles.section}`}>
-          {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}
-{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
+          {totalPage === 0 && (
+              <h1 className="text-center text-xl font-semibold text-gray-700 mt-4 mb-1">
+                No Product Found... Here are some suggested Products
+              </h1>
+            )}{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
             {isValid===true&&<div className="flex -mb-3 sticky top-28 z-10 mt-2">
               <div className="w-1/2 p-0 m-0">
@@ -523,7 +526,7 @@ console.log("hfejshmehgmfe,")
             >
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm mr-11 ml-auto hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
                 onClick={toggleDrawer}
               >
                   <AiFillFilter className="text-xl text-gray-800" />

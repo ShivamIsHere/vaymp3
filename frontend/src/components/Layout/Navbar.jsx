@@ -11,7 +11,7 @@ const Navbar = ({active}) => {
             <div className="flex" key={index}>
                 <Link
                     to={i.url}
-                    className={`${active === index + 1 ? "text-flipkart-yellow" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 px-6 cursor-pointer font-bold`}
+                    className={`${active === index + 1 ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 px-6 cursor-pointer font-[500]`}
                 >
                     {i.title}
                     </Link>

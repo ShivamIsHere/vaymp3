@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from '../../styles/styles';
 import EventCard from './EventCard';
 import { getAllEvents } from '../../redux/actions/event';
+import { Oval } from 'react-loader-spinner';
 
 const Events = () => {
   const { allEvents, isLoading } = useSelector((state) => state.events);
@@ -15,7 +16,9 @@ const Events = () => {
   return (
     <div>
       {isLoading ? (
-        <p>Loading...</p>
+       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+       <Oval color="#00BFFF" height={80} width={80} />
+     </div>
       ) : (
         <div className={styles.section}>
           <div className={styles.heading}>

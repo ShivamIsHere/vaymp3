@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { server } from "../../server";
 import styles from "../../styles/styles";
 import Loader from "../Layout/Loader";
@@ -15,6 +15,7 @@ const ShopInfo = ({ isOwner }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
@@ -32,11 +33,15 @@ const ShopInfo = ({ isOwner }) => {
   }, [dispatch, id]);
 
   const logoutHandler = async () => {
-    axios.get(`${server}/shop/logout`, {
-      withCredentials: true,
-    });
-    window.location.reload();
+    try {
+      await axios.get(`${server}/shop/logout`, { withCredentials: true });
+      window.location.reload();
+      navigate("/shop-login");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
 
   const filteredProducts =
     products?.filter((product) => product.listing !== "Event") || [];
@@ -110,12 +115,21 @@ const ShopInfo = ({ isOwner }) => {
                     <span className="text-white">Edit Shop</span>
                   </div>
                 </Link>
+                <Link to="/shop-login">
                 <div
                   className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
                   onClick={logoutHandler}
                 >
                   <span className="text-white">Log Out</span>
                 </div>
+                </Link>
+                <Link to="/dashboard">
+                <div
+                    className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
+                  >
+                   <span className="text-[#fff]">Go Dashboard</span>
+                 </div>
+               </Link>
               </div>
             )}
           </div>
@@ -163,9 +177,18 @@ const ShopInfo = ({ isOwner }) => {
                   <span className="text-white">Edit Shop</span>
                 </div>
               </Link>
+              <Link to="/shop-login">
               <div className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`} onClick={logoutHandler}>
                 <span className="text-white">Log Out</span>
               </div>
+              </Link>
+              <Link to="/dashboard">
+                <div
+                    className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
+                  >
+                   <span className="text-[#fff]">Go Dashboard</span>
+                 </div>
+               </Link>
             </div>
           )}
           </div>

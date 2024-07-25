@@ -257,7 +257,9 @@ const ProductsPage = () => {
 
           {/* for larger screen */}
           {categoriesParam ==="Cloths"  && (
-            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
+            <div className=" bg-gray-100 flex rounded-full sticky top-28 justify-between items-center"
+              style={{ zIndex: 1 }}
+            >
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
                 onClick={() => setFilterDrawerOpen(true)}
@@ -286,7 +288,7 @@ const ProductsPage = () => {
               <div className="w-1/2">
                 <button
                   onClick={() => setFilterDrawerOpen(true)}
-                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
+                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out lg:hidden"
                 >
                   <AiFillFilter className="mr-2 text-xl text-gray-800" />
                   Filter
@@ -296,7 +298,7 @@ const ProductsPage = () => {
               <div className="w-1/2">
                 <button
                   onClick={() => setSortDrawerOpen(true)}
-                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
+                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out lg:hidden"
                 >
 
                   <AiOutlineSwap className="text-xl text-gray-800 mr-2" />
@@ -309,11 +311,11 @@ const ProductsPage = () => {
 
           {/* for larger screen */}
           {categoriesParam ==="Shoes"  && (
-            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
-              <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
+            <div className=" bg-gray-100 flex rounded-full sticky top-28 z-10 justify-between items-center">
+              <h4 className="text-4xl font-semibold text-gray-700 hidden lg:block">New Arrivals</h4>
               <button
                 onClick={() => setFilterDrawerOpen(true)}
-                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden lg:block  hover:bg-blue-100 transition duration-300 ease-in-out"              
               >
                 <AiFillFilter className="ml-11 -mb-6 text-xl text-gray-800" />
                 filter
@@ -322,7 +324,7 @@ const ProductsPage = () => {
 
               <button
                 onClick={() => setSortDrawerOpen(true)}
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:block hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden lg:block hover:bg-blue-100 transition duration-300 ease-in-out"
               >
 
                 <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
@@ -336,8 +338,12 @@ const ProductsPage = () => {
 
 <div className={`${styles.section}`}>
   <div className="pt-0">
-  <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 mt-2">
+  <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
                 {data.map((product) => (
+                  <ProductCard data={product} key={product._id} />
+                ))}
+              </div>
+              <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 pt-2">                {data.map((product) => (
                   <ProductCard data={product} key={product._id} />
                 ))}
               </div>

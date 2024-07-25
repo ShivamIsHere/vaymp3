@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { BsFillBagFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +12,7 @@ import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Oval } from 'react-loader-spinner';
 import { Navigate } from "react-router-dom";
 
 const UserOrderDetails = () => {
@@ -128,7 +130,9 @@ const UserOrderDetails = () => {
   if (data?.status === "Returned") active = 5;
   if (data?.status === "cancel Request") active = 6;
   if (loading) {
-    return <div>Loading...</div>; // Show a loading message while fetching data
+    return   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Oval color="#00BFFF" height={80} width={80} />
+  </div>; // Show a loading message while fetching data
   }
   if (!data) {
     return <div>No data found for this order.</div>;
@@ -189,7 +193,7 @@ const UserOrderDetails = () => {
   };
 
   return (
-    <div className={`py-4 min-h-screen ${styles.section}`}>
+    <div className={`py-4 min-h-0 ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center">
           <BsFillBagFill size={30} color="crimson" />
@@ -452,9 +456,12 @@ const UserOrderDetails = () => {
         </div>
       </div>
       <br />
+      {/* for mobile view */}
+      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="fixed bottom-0 left-0 w-full bg-gray-800 shadow-lg p-1 lg:hidden" style={{ zIndex: 0 }}>
       <div className="flex justify-between items-center">
       <div
-        className={`${styles.button} bg-[#000] rounded-[4px] h-11`}
+        className={`${styles.button} bg-blue-500 rounded-[4px] h-11`}
         onClick={handleMessageSubmit}
       >
         <span className="font-medium text-sm flex items-center">SEND MESSAGE</span>
@@ -477,7 +484,7 @@ const UserOrderDetails = () => {
             // Handle return logic here
             console.log("================???????", data);
             const response = await axios.patch(
-              `http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`,
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
               {
                 return1: true, // Update the stock value in the request body
                 returnedAt: Date.now(),
@@ -532,7 +539,111 @@ const UserOrderDetails = () => {
             const img = data.image;
             const kuchviId = data.kuchviId;
             const response = await axios.patch(
-              `http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`,
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
+              {
+                cancel: true, // Update the stock value in the request body
+                status: "cancel Request",
+              }
+            );
+
+            if (response.status >= 200 && response.status < 300) {
+              console.log("Stock updated successfully");
+            } else {
+              throw new Error(
+                `Failed to update stock - Unexpected status code: ${response.status}`
+              );
+            }
+            window.location.reload();
+          }}
+        >
+          Cancel
+        </Button>
+      )}
+      </div>
+      </div>
+      </div>
+      {/* for larger screen */}
+      <div className="hidden lg:flex justify-between items-center">
+      <div
+        className={`${styles.button} bg-blue-500 rounded-[4px] h-11`}
+        onClick={handleMessageSubmit}
+      >
+        <span className="font-medium text-sm flex items-center">SEND MESSAGE</span>
+        </div>
+      
+      {data.status == "Delivered" ||
+      data.status == "Returned" ||
+      data.status == "Return Request" ? (
+        <Button
+        className={`${styles.button} rounded-[10px] h-11`}
+        variant="contained"
+        style={{ backgroundColor: !isReturnable || data.status === "Returned" || data.return1 ? '#bfdbfe' : '#60a5fa', 
+          color: !isReturnable || data.status === "Returned" || data.return1 ? '#a0aec0' : '#000',
+          borderRadius: '12px'
+        }}          
+        disabled={
+            !isReturnable || data.status == "Returned" ? true : data.return1
+          }
+          onClick={async () => {
+            // Handle return logic here
+            console.log("================???????", data);
+            const response = await axios.patch(
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
+              {
+                return1: true, // Update the stock value in the request body
+                returnedAt: Date.now(),
+                status: "Return Request",
+              }
+            );
+
+            if (response.status >= 200 && response.status < 300) {
+              console.log("Stock updated successfully");
+            } else {
+              throw new Error(
+                `Failed to update stock - Unexpected status code: ${response.status}`
+              );
+            }
+            window.location.reload();
+          }}
+        >
+          Return
+        </Button>
+      ) : (
+        <Button
+          className={`${styles.button} rounded-[4px] h-11`}
+          variant="contained"
+          style={{
+            backgroundColor: data.status === "cancel Request" || data.cancel ? '#bfdbfe' : '#60a5fa',
+            color: data.status === "cancel Request" || data.cancel ? '#a0aec0' : '#000',
+            borderRadius: '12px' // Change border radius to 20px
+          }}
+          disabled={data.status == "cancel Request" ? true : data.cancel}
+          // disabled={data.cancel}
+          onClick={async () => {
+            console.log("================???????", data);
+            // const id= data._id
+            const orderId = data.orderid;
+            const productId = data.productid;
+            const size = data.size;
+            const qty = 1;
+            const userId = data.userId;
+            const status = data.status;
+            const shopId = data.shopId;
+            const shopPrice = data.shopPrice;
+            const markedPrice = data.markedPrice;
+            const discountPrice = data.discountPrice;
+            const shippingAddress = data.address;
+            const refundStatus = data.refundStatus;
+            const user = data.user;
+            const paymentInfo = data.paymentInfo;
+            const productName = data.productName;
+            const product = data.product;
+            const cancel = data.cancel;
+            const delivered = data.delivered;
+            const img = data.image;
+            const kuchviId = data.kuchviId;
+            const response = await axios.patch(
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
               {
                 cancel: true, // Update the stock value in the request body
                 status: "cancel Request",

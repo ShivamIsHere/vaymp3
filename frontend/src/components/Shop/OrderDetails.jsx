@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
 import { server } from "../../server";
 import axios from "axios";
+import { Oval } from 'react-loader-spinner';
 import { toast } from "react-toastify";
 
 const OrderDetails = () => {
@@ -83,7 +84,9 @@ const OrderDetails = () => {
   console.log("Data:", data);
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading message while fetching data
+    return  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Oval color="#00BFFF" height={80} width={80} />
+  </div>; // Show a loading message while fetching data
   }
 
 

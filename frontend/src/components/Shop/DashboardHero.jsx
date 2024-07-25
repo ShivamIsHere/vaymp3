@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineArrowRight, AiOutlineMoneyCollect } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdBorderClear } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
@@ -27,6 +27,7 @@ const DashboardHero = () => {
   const [kuchvi, setkuchvi] = useState([]);
   const [row, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // const seller=id;
   console.log("seller",seller.notification)
@@ -148,7 +149,22 @@ const DashboardHero = () => {
 
   
   const columns = [
-    { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    // { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    {
+      field: "image",
+      headerName: "Image",
+      minWidth: 100,
+      flex: 0.7,
+      // renderCell: (params) => <img src={params.row.image} alt="Product" />,
+
+      renderCell: (params) => (
+        <img
+          src={params.row.image}
+          alt="Product"
+          style={{ height: "40px", width: "40px" }}
+        />
+      )
+    },
     {
       field: "status",
       headerName: "Status",
@@ -160,7 +176,7 @@ const DashboardHero = () => {
     },
     {
       field: "itemsQty",
-      headerName: "Items Qty6",
+      headerName: "Items Quantity",
       type: "number",
       minWidth: 130,
       flex: 0.7,
@@ -196,6 +212,11 @@ const DashboardHero = () => {
     }
     
   ];
+  
+  const handleRowClick = (params) => {
+    navigate(`/order/${params.row.kuchviId}`);
+  };
+  
 
   // const row = [];
 
@@ -212,6 +233,7 @@ const DashboardHero = () => {
   return (
     <div className="w-full p-8">
       <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
+      <div className="flex m-1 p-1 space-x-2">
       <button
         className={`py-2 px-4 rounded ${
           showNewStock ? "bg-red-500 text-white" : "bg-blue-500 text-white"
@@ -228,6 +250,7 @@ const DashboardHero = () => {
       >
         {showShopStatus ? "Shop Open" : "Shop Closed"}
       </button>
+      </div>
       <br></br>
       <div className="w-full block 800px:flex items-center justify-between">
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
@@ -291,6 +314,7 @@ const DashboardHero = () => {
           rows={row}
           columns={columns}
           pageSize={10}
+          onRowClick={handleRowClick}
           disableSelectionOnClick
           autoHeight
         />

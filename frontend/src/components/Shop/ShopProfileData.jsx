@@ -80,7 +80,7 @@ const ShopProfileData = ({ isOwner }) => {
           </div>
         </div>
         <div>
-          {isOwner && (
+          {/* {isOwner && (
             <div>
               <Link to="/dashboard">
                 <div className={`${styles.button} !rounded-[4px] h-[42px]`}>
@@ -88,7 +88,7 @@ const ShopProfileData = ({ isOwner }) => {
                 </div>
               </Link>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 

@@ -25,12 +25,19 @@ const AllEvents = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
+    // { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
     {
       field: "name",
-      headerName: "Name",
-      minWidth: 180,
-      flex: 1.4,
+      headerName: "Event Name",
+      minWidth: 160,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Link to={`/product/${params.id}?isEvent=true`} className="">
+            {params.row.name}
+          </Link>
+        );
+      },
     },
     {
       field: "price",

@@ -37,7 +37,7 @@ const Payment = () => {
           {
             description: "Sunflower",
             amount: {
-              currency_code: "₹",
+              currency_code: "Rs",
               value: orderData?.totalPrice,
             },
           },
@@ -241,12 +241,12 @@ const PaymentInfo = ({
             ) : null}
           </div>
           <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
-            Pay with Debit/credit card
+            UPI Payment Coming Soon
           </h4>
         </div>
 
         {/* pay with card */}
-        {select === 1 ? (
+        {/* {select === 1 ? (
           <div className="w-full flex border-b">
             <form className="w-full" onSubmit={paymentHandler}>
               <div className="w-full flex pb-3">
@@ -347,7 +347,7 @@ const PaymentInfo = ({
               )}
             </form>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
       <br />
       {/* cash on delivery */}
@@ -399,24 +399,22 @@ const CartData = ({ orderData }) => {
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">₹{orderData?.subTotalPrice}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
+        <h5 className="text-[18px] font-[600]">Rs {orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">Shipping:</h3>
-        <h5 className="text-[18px] font-[600]">₹{shipping}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
+        <h5 className="text-[18px] font-[600]">Rs {shipping}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "₹ " + orderData.discountPrice : "-"}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "Rs " + orderData.discountPrice : "-"}</h5>
       </div>
-      <br/>
-      <div className="flex justify-between border-b pb-3">
-        <h3 className="text-[18px] text-[#000] font-bold">Total:</h3>
-        <h5 className="text-[18px] font-[600] ">₹{orderData?.totalPrice}</h5>
-      </div> 
+      <h5 className="text-[18px] font-[600] text-end pt-3">
+        Rs {orderData?.totalPrice}
+      </h5>
       <br />
     </div>
   );

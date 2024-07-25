@@ -22,9 +22,13 @@ const Wishlist = ({ setOpenWishlist }) => {
     }
   };
 
+
+
   const removeFromWishlistHandler = (data) => {
     dispatch(removeFromWishlist(data));
   };
+
+
 
 
   // const addToCartHandler = (data) => {
@@ -103,6 +107,12 @@ const CartSingle = ({ data,removeFromWishlistHandler }) => {
     
   };
 
+  const handleRemoveClick = (e) => {
+    e.stopPropagation(); 
+    removeFromWishlistHandler(data);
+  };
+
+
   return (
     <div className="border-[#928f8f] border-t-[1px] border-b-[1px] p-4 cursor-pointer" onClick={handleProductClick}>
       <div className="w-full flex items-center">
@@ -137,8 +147,8 @@ const CartSingle = ({ data,removeFromWishlistHandler }) => {
           </div>
           <div className="flex justify-end mt-5">
             <button
-              className="hover:text-[#f06865] border border-[#e4434373] font-Roboto text-[14px] cursor-pointer pl-3 pr-3 py-1 flex items-center justify-center shadow-md"
-              onClick={() => removeFromWishlistHandler(data)}
+              className="border border-[#e4434373] font-Roboto text-[14px] cursor-pointer pl-3 pr-3 py-1 flex items-center justify-center shadow-md"
+              onClick={handleRemoveClick}
             >
               Remove
             </button>

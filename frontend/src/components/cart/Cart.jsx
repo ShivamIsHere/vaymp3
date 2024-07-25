@@ -223,7 +223,7 @@ const Cart = ({ setOpenCart }) => {
               </div>
             </div>
 
-            <div className="px-5 mb-3">
+            <div className="px-5 mb-3 mt-3">
               {/* checkout buttons */}
               <Link to="/checkout">
                 <div
@@ -364,7 +364,7 @@ const CartSingle = ({
         </div>
         <div className="flex justify-end">
           <button
-            className="hover:text-[#f06865] border border-[#e4434373] font-Roboto text-[14px] cursor-pointer pl-3 pr-3 py-1 flex items-center justify-center shadow-md"
+            className="border border-[#e4434373] font-Roboto text-[14px] cursor-pointer pl-3 pr-3 py-1 flex items-center justify-center shadow-md"
             onClick={() => removeFromCartHandler(data, selectedSize)}
           >
             Remove

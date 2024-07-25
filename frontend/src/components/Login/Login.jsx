@@ -24,7 +24,7 @@ const Login = () => {
       const res = await axios.post(
         `${server}/user/login-user`,
         {
-          email,
+          email: email.toLowerCase(),
           password,
         },
         { withCredentials: true }
@@ -44,6 +44,10 @@ const Login = () => {
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
     setError({ message: "", field: "" });
+  };
+
+  const handleEmailBlur = () => {
+    setEmail(email.toLowerCase());
   };
 
   return (
@@ -71,6 +75,7 @@ const Login = () => {
                   required
                   value={email}
                   onChange={handleInputChange(setEmail)}
+                  onBlur={handleEmailBlur}
                   className={`appearance-none block w-full px-3 py-2 border ${
                     error.field === "email" ? "border-red-500" : "border-gray-300"
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   AiFillHeart,
   AiOutlineEye,
+  AiTwotoneHeart,
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
@@ -182,7 +183,7 @@ const ProductCard = ({ data, isEvent }) => {
               title="Remove from wishlist"
             />
           ) : (
-            <AiOutlineHeart
+            <AiTwotoneHeart
               size={22}
               className="cursor-pointer absolute right-2 top-5"
               onClick={addToWishlistHandler}
@@ -190,13 +191,13 @@ const ProductCard = ({ data, isEvent }) => {
               title="Add to wishlist"
             />
           )}
-          <AiOutlineEye
+          {/* <AiOutlineEye
             size={22}
             className="cursor-pointer absolute right-2 top-14"
             onClick={() => setOpen(!open)}
             color="#333"
             title="Quick view"
-          />
+          /> */}
           {/* <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
