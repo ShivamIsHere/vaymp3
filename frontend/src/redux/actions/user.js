@@ -61,9 +61,9 @@ export const updateUserInformation =
         },
         {
           withCredentials: true,
-          headers: {
-            "Access-Control-Allow-Credentials": true,
-          },
+          // headers: {
+          //   "Access-Control-Allow-Credentials": true,
+          // },
         }
       );
 

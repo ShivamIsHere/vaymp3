@@ -6,8 +6,16 @@ const DropDown = ({ categoriesData, setDropDown }) => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const submitHandle = (i) => {
-    navigate(`/products?category=${i.title}`);
-    setDropDown(false);
+    console.log("i.title",i.title)
+    if(i.title==="Cloths"){
+    navigate(`/search/cloths?page=1`);
+  }else if(i.title==="Shoes"){
+    navigate(`/search/shoes?page=1`);
+  }else if(i.title==="Accessories"){
+    navigate(`/search/accessories?page=1`);
+
+  }    
+  setDropDown(false);
     window.location.reload();
   };
 

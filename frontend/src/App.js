@@ -104,7 +104,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <ScrollRestoration />
+      {/* <ScrollRestoration /> */}
       {stripeApikey && (
         <Elements stripe={loadStripe(stripeApikey)}>
           <Routes>

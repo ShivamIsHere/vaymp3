@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams,useNavigate } from "react-router-dom";
 import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import Loader from "../components/Layout/Loader";
@@ -12,6 +12,7 @@ import { categoriesData, sleeveType, neckType, color, fabric, occasion, fit, gen
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap } from "react-icons/ai";
 import { useInView } from "react-intersection-observer";
 import ClipLoader from "react-spinners/ClipLoader";
+import BasicPagination from "./BasicPagination";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
@@ -19,10 +20,13 @@ const ProductsPage = () => {
   const { allPro, allProduct, isLoading, totalPages } = useSelector((state) => state.products);
   // console.log("allProducts",allProducts)
   console.log("allProduct",allProduct)
-
+  const navigate = useNavigate();
+  // const pageNav = searchParams.get("page")|| 1;
+  const pageNav = parseInt(searchParams.get("page")) || 1;
+  console.log("lllllllllllllllllllllllllll",pageNav)
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
-  const [datas, setDatas] = useState([]);
+  // const [datas, setDatas] = useState([]);
   const [filters, setFilters] = useState({
     category: categoriesParam ? categoriesParam.split(',') : [],
     subCategory: [],
@@ -65,9 +69,9 @@ const ProductsPage = () => {
 
   // const [perPage] = useState(30); // Or any default value you prefer
 
-  const { ref: loadMoreRef, inView } = useInView({
-    threshold: 1.0,
-  });
+  // const { ref: loadMoreRef, inView } = useInView({
+  //   threshold: 1.0,
+  // });
 
 
 
@@ -76,12 +80,17 @@ const ProductsPage = () => {
   //     setPage((prevPage) => prevPage + 1);
   //   }
   // }, [inView, page,isLoading, totalPages]);
-  useEffect(() => {
-    if (inView && !isLoading&& page < totalPages) {
-      handlePageChange(page + 1);
-    }
-  }, [inView, page, totalPages,isLoading]);
+  // useEffect(() => {
+  //   if (inView && !isLoading&& page < totalPages) {
+  //     handlePageChange(page + 1);
+  //   }
+  // }, [inView, page, totalPages,isLoading]);
   
+  useEffect(() => {
+    setPage(pageNav);
+    // dispatch(getAllProducts(pageNav));
+    
+  }, [pageNav]);
 
   useEffect(() => {
     applyFilters();
@@ -98,14 +107,14 @@ const ProductsPage = () => {
 
   useEffect(() => {
     // Update data and datas based on viewport size
-    if (window.innerWidth < 1024) {
-      setDatas((prevDatas) => [...prevDatas, ...allProduct]);
-      setData(datas); // Optionally update data separately if needed
-    } else {
+    // if (window.innerWidth < 1024) {
+    //   // setDatas((prevDatas) => [...prevDatas, ...allProduct]);
+    //   // setData(datas); // Optionally update data separately if needed
+    // } else {
       setData(allPro);
-      setDatas([]); // Clear datas for desktop view
-    }
-  }, [allPro, allProduct]);
+      // setDatas([]); // Clear datas for desktop view
+    // }
+  }, [allPro]);
 
   const handleFilterChange = (key, value) => {
     const updatedFilters = { ...filters };
@@ -202,7 +211,11 @@ const ProductsPage = () => {
 
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
+    // navigate(`${location.pathname}?${searchParams.toString()}`);
+
+    navigate(`${location.pathname}?page=${pageNumber}`);
   };
+  
   const visibleSizes = showAllSizes ? size : size.slice(0, 6);
   const visibleSubCategories = showAllSubCategories ? subCategory : subCategory.slice(0, 6);
   const visibleColors = showAllColors ? color : color.slice(0, 6);
@@ -244,26 +257,24 @@ const ProductsPage = () => {
 
           {/* for larger screen */}
           {categoriesParam ==="Cloths"  && (
-            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 justify-between items-center"
-              style={{ zIndex: 1 }}
-            >
-            <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
+            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
+              <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
                 onClick={() => setFilterDrawerOpen(true)}
-                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm mr-11 ml-auto hidden md:flex items-center justify-center space-x-2  hover:bg-blue-100 transition duration-300 ease-in-out"              
-                >
-                <AiFillFilter className="text-xl text-gray-800" />
-                <span className="text-center">Filter</span>
+                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
+              >
+                <AiFillFilter className="ml-11 -mb-6 text-xl text-gray-800" />
+                filter
 
               </button>
 
               <button
                 onClick={() => setSortDrawerOpen(true)}
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
-                >
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:block hover:bg-blue-100 transition duration-300 ease-in-out"
+              >
 
-<AiOutlineSwap className="text-xl text-gray-800" />
-<span className="text-center">Sort</span>
+                <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
+                Sort
 
               </button>
             </div>
@@ -324,13 +335,8 @@ const ProductsPage = () => {
 
 
 <div className={`${styles.section}`}>
-            <div className="pt-0 hidden md:block">
-              {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
-                {datas.map((product) => (
-                  <ProductCard data={product} key={product._id} />
-                ))}
-              </div> */}
-              <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 mt-2">
+  <div className="pt-0">
+  <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 mt-2">
                 {data.map((product) => (
                   <ProductCard data={product} key={product._id} />
                 ))}
@@ -340,43 +346,31 @@ const ProductsPage = () => {
                 <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
               </div>
             ) : null}
-              {/* Pagination for larger screens */}
-              <div className="mt-4 flex justify-center md:flex">
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    className={`px-4 py-2 border mx-1 ${page === index + 1 ? 'bg-blue-500 text-white' : ''}`}
-                    onClick={() => handlePageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
             <div className="pt-0 md:hidden">
               {/* Auto-load more products on scroll for mobile */}
               <div className="grid grid-cols-2 gap-1 mb-12">
-                {datas.map((product, index) => (
+                {data.map((product, index) => (
                   <ProductCard key={index} data={product} />
                 ))}
               </div>
-              {datas.length === 0 ? (
+              {data.length === 0 ? (
                 <div className="flex justify-center items-center">
                 <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
               </div>
             ) : null}
-              <div ref={loadMoreRef} className="mt-4 flex justify-center">
-                {isLoading===true && (
-                  <ClipLoader
-                    color="#2874F0"
-                    size={55}
-                    thick={50}
-                    speedMultiplier={1}
-                  />
-                )}
-              </div>
             </div>
-          </div>
+
+    {/* Pagination for all screens */}
+    <div className="mt-4 flex justify-center">
+    <BasicPagination 
+                  count={totalPages} 
+                  page={page} 
+                  onChange={handlePageChange} 
+                />
+    </div>
+  </div>
+</div>
+
           {/* <Footer /> */}
         </div>
       )}

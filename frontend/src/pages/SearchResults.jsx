@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
@@ -8,6 +8,8 @@ import Loader from "../components/Layout/Loader";
 import styles from "../styles/styles";
 import axios from "axios";
 import { server } from "../server";
+import { useMediaQuery } from 'react-responsive';
+
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap  } from "react-icons/ai";
 import {
   categoriesData,
@@ -30,11 +32,18 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const SearchResults = () => {
   const { query } = useParams();
-  const [filteredData, setFilteredData] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page')) || 1;
+  console.log("khvbvmmvmvumv")
+  const [filteredData, setFilteredData] = useState({});
   const [filteredDatas, setFilteredDatas] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -89,13 +98,75 @@ const SearchResults = () => {
     footwearSubCategorie: false,
   });
 
-  const fetchProducts = async () => {
+  const isLargeScreen = useMediaQuery({ query: '(min-width: 1024px)' });
+  const isSmallOrMediumScreen = useMediaQuery({ query: '(max-width: 1023px)' });
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+
+    const initialFilters = {
+      colors: searchParams.get("colors") ? searchParams.get("colors").split(",") : [],
+      sizes: searchParams.get("sizes") ? searchParams.get("sizes").split(",") : [],
+      brandingDatas: searchParams.get("brandingDatas") ? searchParams.get("brandingDatas").split(",") : [],
+      neckTypes: searchParams.get("neckTypes") ? searchParams.get("neckTypes").split(",") : [],
+      sleeveTypes: searchParams.get("sleeveTypes") ? searchParams.get("sleeveTypes").split(",") : [],
+      fabrics: searchParams.get("fabrics") ? searchParams.get("fabrics").split(",") : [],
+      occasions: searchParams.get("occasions") ? searchParams.get("occasions").split(",") : [],
+      fits: searchParams.get("fits") ? searchParams.get("fits").split(",") : [],
+      subCategorys: searchParams.get("subCategorys") ? searchParams.get("subCategorys").split(",") : [],
+      genders: searchParams.get("genders") ? searchParams.get("genders").split(",") : [],
+      customerRatings: searchParams.get("customerRatings") ? searchParams.get("customerRatings").split(",") : [],
+      priceRanges: searchParams.get("priceRanges") ? searchParams.get("priceRanges").split(",") : [],
+      shoeSize: searchParams.get("shoeSize") ? searchParams.get("shoeSize").split(",") : [],
+      shoeOccasion: searchParams.get("shoeOccasion") ? searchParams.get("shoeOccasion").split(",") : [],
+      accessorySubCategorie: searchParams.get("accessorySubCategorie") ? searchParams.get("accessorySubCategorie").split(",") : [],
+      footwearSubCategorie: searchParams.get("footwearSubCategorie") ? searchParams.get("footwearSubCategorie").split(",") : [],
+    };
+
+    const initialSortBy = searchParams.get("sortBy") || "";
+    const initialPage = parseInt(searchParams.get("page")) || 1;
+
+    setFilters(initialFilters);
+    setSortBy(initialSortBy);
+    setCurrentPage(initialPage);
+  }, []);
+
+  const updateURLParams = (newFilters) => {
+    const searchParams = new URLSearchParams();
+
+    // Add filters to URL parameters
+    Object.keys(newFilters).forEach((key) => {
+      if (newFilters[key].length > 0) {
+        searchParams.append(key, newFilters[key].join(","));
+      }
+    });
+
+    // Add sorting and page number to URL parameters
+    if (sortBy) searchParams.append("sortBy", sortBy);
+    searchParams.append("page", currentPage);
+
+    // Update URL with new parameters
+    navigate(`${location.pathname}?${searchParams.toString()}`);
+  };
+
+  useEffect(() => {
+    updateURLParams(filters);
+  }, [filters, sortBy,currentPage,query]);
+
+
+
+
+
+
+
+
+
+  const fetchProducts = async (page=1) => {
     try {
       setIsLoading(true);
       const response = await axios.get(`${server}/product/get-all-searched-products`, {
         params: {
           query,
-          page: currentPage,
+          page,
           color: filters.colors.join(","),
           neckType: filters.neckTypes.join(","),
           sleeveType: filters.sleeveTypes.join(","),
@@ -117,8 +188,12 @@ const SearchResults = () => {
       });
 
       const data = response.data;
+      console.log("Dataaaaaaaaaaa",data)
       if (data.success) {
-        setFilteredData((prevData) => [...prevData, ...data.products]); // Append new data to existing data
+        setFilteredData((prevData) => ({
+          ...prevData,
+          [page]: data.products,
+        }));
         setFilteredDatas(data.products);
         setTotalPage(data.l3)
         setTotalPages(data.totalPages);
@@ -132,10 +207,13 @@ const SearchResults = () => {
       setIsLoading(false);
     }
   };
+  
+// console.log("filteredDatafilteredDatafilteredData",filteredData)
+// console.log("filteredDatasxvvfdddddddddd",filteredDatas)
 
   useEffect(() => {
     const clothesKeywords = [
-      "t-shirts", "tshirt", "blouses", "shirts", "tank tops", "sweaters", "hoodies", "jeans", "trousers", "shorts",
+      "tshirts", "tshirt", "blouses", "shirts", "tank tops", "sweaters", "hoodies", "jeans", "trousers", "shorts",
       "skirts", "leggings", "jackets", "coats", "blazers", "vests", "raincoats", "casual dresses", "formal dresses",
       "maxi dresses", "cocktail dresses", "sundresses", "sports bras", "gym tops", "yoga pants", "track pants",
       "running shorts", "pajamas", "robes", "sweatpants", "lounge tops", "half pants", "bras", "panties", "boxers",
@@ -168,53 +246,113 @@ const SearchResults = () => {
 
     const isClothesQuery = queryWords.some(word => clothesKeywords.includes(word));
     const isShoesQuery = queryWords.some(word => shoesKeywords.includes(word));
-
+console.log("hfejshmehgmfe,")
     if (isClothesQuery) {
       setIsClothes(true);
+      console.log("setIsClothes",isClothes)
     }
     if (isShoesQuery) {
       setIsFootWear(true);
+      console.log("setIsFootWear",isFootWear)
+
     }
     if (isClothesQuery !== isShoesQuery) {
       setIsValid(true);
     }
+  
+    
+    // fetchProducts();
+    // const pagesToFetch = Array.from({ length: currentPage }, (_, i) => i + 1);
+    // pagesToFetch.forEach((page) => {
+    //   if (!filteredData[page]) {
+    //     fetchProducts(page);
+    //   }
+    // });
+    // Fetch data for all pages up to the current page
+    // const pagesToFetch = Array.from({ length: currentPage }, (_, i) => i + 1);
+    // pagesToFetch.forEach((page) => {
+    //   if (!filteredData[page]) {
+    //     fetchProducts(page);
+    //   }
+    // });
+  }, [query,filters]);
 
-    fetchProducts();
+  console.log("bchktfhmc")
+  // console.log("queryquery",filters)
+  useEffect(() => {
+    if (isLargeScreen) {
+      fetchProducts(currentPage);
+    }
+  }, [isLargeScreen, currentPage,query, filters, sortBy]); // Fetch only once on mount
+
+  useEffect(() => {
+    if (isSmallOrMediumScreen) {
+      const pagesToFetch = Array.from({ length: currentPage }, (_, i) => i + 1);
+      pagesToFetch.forEach((page) => {
+        if (!filteredData[page]) {
+          fetchProducts(page);
+        }
+      });
+    }
+  }, [isSmallOrMediumScreen, currentPage, filteredData,query, filters, sortBy]); 
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  //   navigate(`?page=${page}`); // Update the URL with the new page number
+  // };
+
+  useEffect(() => {
+    fetchProducts(currentPage);
   }, [query, currentPage, filters, sortBy]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const handleCheckboxChange = (type, value) => {
-    const newFilters = { ...filters };
-    if (newFilters[type].includes(value)) {
-      newFilters[type] = newFilters[type].filter((item) => item !== value);
-    } else {
-      newFilters[type].push(value);
+  useEffect(() => {
+    if (isSmallOrMediumScreen) {
+      fetchProducts(currentPage);
     }
-    setFilters(newFilters);
-  };
+  }, [filters, currentPage, isSmallOrMediumScreen]);
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
+  const handleCheckboxChange = (filterType, value) => {
+    setCurrentPage(1)
+    setFilters(prevFilters => {
+      const updatedFilters = prevFilters[filterType].includes(value)
+        ? prevFilters[filterType].filter(item => item !== value)
+        : [...prevFilters[filterType], value];
+      return { ...prevFilters, [filterType]: updatedFilters };
+    });
   };
+  // const handleSortChange = (e) => {
+  //   setSortBy(e.target.value);
+  // };
+  const handleSortChange = (event) => {
+    // console.log("Selected Sort Option:", event.target.value);
+    setSortBy(event.target.value);
+  };
+  
+  useEffect(() => {
+    // console.log("Current SortBy:", sortBy);
+    if (sortBy) {
+      fetchProducts(currentPage);
+    }
+  }, [sortBy]);
+  
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
-    setCurrentPage(1);
-    fetchProducts();
+    // setCurrentPage(1);
+    // fetchProducts(1);
   };
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const toggleDropdown = (type) => {
-    setDropdowns({ ...dropdowns, [type]: !dropdowns[type] });
+  const toggleDropdown = (dropdownType) => {
+    setDropdowns(prevDropdowns => ({
+      ...prevDropdowns,
+      [dropdownType]: !prevDropdowns[dropdownType]
+    }));
   };
 
-  const toggleSortDrawer = () => {
+  const toggleSortDrawer = (dropdownType) => {
     setSortDrawerOpen(!sortDrawerOpen);
   };
 
@@ -222,8 +360,16 @@ const SearchResults = () => {
     setSortBy(sortByOption);
     // setSortDrawerOpen(false); // Close the sort drawer after selecting an option
   };
-
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    navigate(`${location.pathname}?page=${newPage}`);
+  };
+  useEffect(() => {
+    const page = parseInt(queryParams.get('page')) || 1;
+    setCurrentPage(page);
+  }, [location.search]);
   const toggleShowAll = (type) => {
+    
     switch (type) {
       case "sizes":
         setShowAllSizes(!showAllSizes);
@@ -313,26 +459,38 @@ const SearchResults = () => {
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 1.0,
   });
+  console.log("currentPagecurrentPage",currentPage)
+  console.log("currentPagecurrentPage",initialPage)
+  
+  useEffect(() => {
+    setCurrentPage(initialPage);
+      
+    // dispatch(getAllProducts(currentPage));
+  }, [initialPage]);
 
-  // useEffect(() => {
-  //   if (inView && !isLoading && currentPage < totalPages) {
-  //     setCurrentPage((prevPage) => prevPage + 1);
-  //   }
-  // }, [inView, isLoading, currentPage, totalPages]);
   useEffect(() => {
     if (inView && !isLoading&& currentPage < totalPages) {
       handlePageChange(currentPage + 1);
     }
-  }, [inView, currentPage, totalPages,isLoading]);
+  }, [inView, currentPage, totalPages,isLoading,filters]);
 
+  
+  const getAllProducts = () => {
+    const allProducts = [];
+    Object.values(filteredData).forEach((pageData) => {
+      allProducts.push(...pageData);
+    });
+    return allProducts;
+  };
+// console.log("getAllProducts()getAllProducts()",getAllProducts())
   return (
     <>
       {isLoading && currentPage === 1 ? (
         <Loader />
       ): (
         <div className="w-full">
-          <Header activeHeading={3} />
-          <div className={`${styles.section} `}>
+          <Header activeHeading={2} />
+          <div className={`${styles.section}`}>
           {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}
 {/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
@@ -769,7 +927,7 @@ const SearchResults = () => {
                    
               </form>
             </div>
-            {filteredData.length === 0 ? (
+            {getAllProducts().length === 0 ? (
               // <div className="text-center text-gray-500 mt-4">No products found</div>
               <div className="flex justify-center items-center">
               <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
@@ -777,10 +935,19 @@ const SearchResults = () => {
             ) : (
               <>
             <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
-              {filteredData.map((product) => (
+              {getAllProducts().map((product) => (
                 <ProductCard data={product} key={product._id} />
               ))}
             </div>
+            </>
+            )}
+            {filteredDatas.length === 0 ? (
+              // <div className="text-center text-gray-500 mt-4">No products found</div>
+              <div className="flex justify-center items-center">
+              <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+            </div>
+            ): (
+              <>
             <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14">
               {filteredDatas.map((product) => (
                 <ProductCard data={product} key={product._id} />

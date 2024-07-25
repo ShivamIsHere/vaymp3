@@ -41,7 +41,7 @@ router.post(
       const { name, category, ShopPrice,originalPrice, discountPrice, stock,gender,color } = req.body;
       // console.log(req.body)
       if (!name  || !category ||!ShopPrice||!originalPrice ||  !discountPrice || !stock || !gender || !color|| !images) {
-        console.log("object1111",originalPrice)
+        // console.log("object1111",originalPrice)
         
         return next(new ErrorHandler("Invalid product data. Please provide all required fields.", 400));
 
@@ -178,7 +178,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const perPage = parseInt(req.query.perPage) || 5; // Adjust as needed
+      const perPage = parseInt(req.query.perPage) || 20; // Adjust as needed
 
       let sortBy = "";
       let sortOrder = -1;
@@ -307,6 +307,10 @@ router.get(
       const { query, page = 1, limit = 5, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy, shoeOccasions, accessorySubCategories, footwearSubCategories,shoeSizes } = req.query;
       let words = query.toLowerCase().split(" ");
        let avail=query.toLowerCase().includes("t shirt")|| query.toLowerCase().includes("t-shirt")|| query.toLowerCase().includes("tshirt")|| query.toLowerCase().includes("t shirts")|| query.toLowerCase().includes("tshirts")|| query.toLowerCase().includes("t-shirtes")|| query.toLowerCase().includes("t shirtes")|| query.toLowerCase().includes("tshirtes");
+       let avail2=query.toLowerCase()==("shirt")|| query.toLowerCase()==("Shirt")|| query.toLowerCase()==("Shirts")|| query.toLowerCase()==("shirts");
+
+       console.log("query22222",avail,query)
+       console.log("query22222",avail2,query)
 
        const stopWords = [
         "for", "in", "the", "and", "a", "of", "to", "is", "on", "at", "by", "with",
@@ -323,7 +327,7 @@ router.get(
       
 
       const quer = words.join(" ");
-      console.log("req.query", req.query);
+      // console.log("req.query", req.query);
       
 
       // Fetch all products
@@ -334,7 +338,7 @@ router.get(
       );
       let l1=filteredProducts.length;
       // console.log(filteredProducts);
-      console.log("11111111111111111", filteredProducts.length);
+      // console.log("11111111111111111", filteredProducts.length);
 
       // Apply gender filter
       if (quer.includes("female") || quer.includes("females") || quer.includes("women") || quer.includes("woman") ||
@@ -362,7 +366,7 @@ router.get(
       if (quer.includes("shoes") || quer.includes("shoe") || quer.includes("joota") || quer.includes("juta") || 
           quer.includes("jhoota") || quer.includes("jutta")|| quer.includes("slipper")|| quer.includes("slippers")|| quer.includes("sliper")|| quer.includes("slipers")) {
         filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "shoes");
-        console.log("22222222222222222", filteredProducts.length);
+        // console.log("22222222222222222", filteredProducts.length);
 
       } else if (quer.includes("accessories") || quer.includes("sunglasses") || quer.includes("jhumka") || quer.includes("jumka") ||
                  quer.includes("caps") || quer.includes("earrings") || quer.includes("watches") || quer.includes("belts") ||
@@ -372,15 +376,15 @@ router.get(
                  quer.includes("analogwatches") || quer.includes("hairbands") || quer.includes("gloves") ||
                  quer.includes("drivinggloves")) {
         filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "accessories");
-        console.log("333333333333333", filteredProducts.length);
+        // console.log("333333333333333", filteredProducts.length);
 
       } else if (quer.includes("clothes") || quer.includes() || quer.includes("dresses") || quer.includes("cloths") || 
                  quer.includes("cloth") || quer.includes("kapra") || quer.includes("dress")) {
         filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() !== "accessories" && val.category?.toLowerCase() !== "shoes");
-        console.log("44444444444444444", filteredProducts.length);
+        // console.log("44444444444444444", filteredProducts.length);
 
       }
-      console.log("5555555555555555555555", filteredProducts.length);
+      // console.log("5555555555555555555555", filteredProducts.length);
 
       // Apply keyword filtering with remaining words
       const filterByWord = (product, word) => {
@@ -393,7 +397,7 @@ router.get(
           product?.fit,
           product?.sleeveType,
           product?.neckType,
-          product?.name,
+          product?.name,  
           product?.tags,
           product?.brand,
           product?.shoeOccasions,
@@ -403,7 +407,7 @@ router.get(
         ];
         return productProperties.some(prop => prop && prop.toLowerCase().includes(word));
       };
-      console.log("666666666666666666666666", filteredProducts.length);
+      // console.log("666666666666666666666666", filteredProducts.length);
 
       words.forEach((word) => {
         const filtered = filteredProducts.filter(product => filterByWord(product, word));
@@ -411,16 +415,26 @@ router.get(
           filteredProducts = filtered;
         }
       });
-      console.log("777777777777777", filteredProducts.length);
+      // console.log("777777777777777", filteredProducts.length);
 
       if(avail){
         // console.log("lllkjl23",filteredProducts[0])
         const a1=filteredProducts.filter((val)=>{
-          console.log("lllll67",val)
-          return val?.subCategory.includes("T-shirts")
+          console.log("lllll67",val.subCategory,val)
+          return val?.subCategory.includes("Tshirt")
         })
-        console.log("lllkjl899",a1.length)
+        // console.log("lllkjl899",a1.length)
         filteredProducts=a1;
+      }
+
+      if(avail2){
+        // console.log("lllkjl23",filteredProducts[0])
+        const a2=filteredProducts.filter((val)=>{
+          console.log("lllll67",val.subCategory,val)
+          return val?.subCategory.includes("Shirts")
+        })
+        // console.log("lllkjl899",a1.length)
+        filteredProducts=a2;
       }
       let l2 = filteredProducts.length;
       let l3 = (l1 === l2) ? 0 : l2;
@@ -435,7 +449,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after color filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after color filter:", filteredProducts.length);
   
       if (subCategory) {
         const subCategoryArray = subCategory.split(',').map(c => c.trim());
@@ -446,7 +460,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after subCategory filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after subCategory filter:", filteredProducts.length);
 
       if (neckType) {
         const neckTypeArray = neckType.split(',').map(c => c.trim());
@@ -457,7 +471,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after neckType filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after neckType filter:", filteredProducts.length);
 
       if (sleeveType) {
         const sleeveTypeArray = sleeveType.split(',').map(c => c.trim());
@@ -468,7 +482,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after sleeveType filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after sleeveType filter:", filteredProducts.length);
 
       if (shoeSizes) {
         const sizesArray = shoeSizes.split(',').map(s => s.trim());
@@ -488,7 +502,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after size filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after size filter:", filteredProducts.length);
 
       if (brand) {
         const brandsArray = brand.split(',').map(c => c.trim());
@@ -499,7 +513,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after brand filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after brand filter:", filteredProducts.length);
 
       if (fit) {
         const fitsArray = fit.split(',').map(c => c.trim());
@@ -510,7 +524,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after fit filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after fit filter:", filteredProducts.length);
 
       if (occasion) {
         const occasionsArray = occasion.split(',').map(c => c.trim());
@@ -521,7 +535,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after occasion filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after occasion filter:", filteredProducts.length);
 
       if (shoeOccasions) {
         const shoeOccasionsArray = shoeOccasions.split(',').map(c => c.trim());
@@ -532,7 +546,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after shoeOccasions filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after shoeOccasions filter:", filteredProducts.length);
 
       if (accessorySubCategories) {
         const accessorySubCategoriesArray = accessorySubCategories.split(',').map(c => c.trim());
@@ -543,7 +557,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after accessorySubCategories filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after accessorySubCategories filter:", filteredProducts.length);
 
       if (footwearSubCategories) {
         const footwearSubCategoriesArray = footwearSubCategories.split(',').map(c => c.trim());
@@ -554,7 +568,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after footwearSubCategories filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after footwearSubCategories filter:", filteredProducts.length);
 
       if (fabric) {
         const fabricsArray = fabric.split(',').map(c => c.trim());
@@ -565,7 +579,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after fabric filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after fabric filter:", filteredProducts.length);
 
       if (gender) {
         const gendersArray = gender.split(',').map(c => c.trim());
@@ -576,7 +590,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after gender filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after gender filter:", filteredProducts.length);
 
       if (customerRating) {
         const ratingRanges = customerRating.split(',');
@@ -594,7 +608,7 @@ router.get(
         );
       }
 
-      console.log("Filtered Products Count after customerRating filter:", filteredProducts.length);
+      // console.log("Filtered Products Count after customerRating filter:", filteredProducts.length);
 
       if (priceRange) {
         const priceRanges = priceRange.split(',');
@@ -608,19 +622,19 @@ router.get(
         filteredProducts = filteredProducts.filter(product =>
           product.discountPrice >= minPrice && product.discountPrice <= maxPrice
         );
-        console.log("Filtered Products Count after priceRange filter:", filteredProducts.length);
+        // console.log("Filtered Products Count after priceRange filter:", filteredProducts.length);
         
       }
 
       
-      console.log("Filtered Products Count after removing 'Event' listings:", filteredProducts.length);
+      // console.log("Filtered Products Count after removing 'Event' listings:", filteredProducts.length);
 
       // Filter out products with zero quantity in all sizes
       filteredProducts = filteredProducts.filter(product =>
         product.stock.some(stockItem => stockItem.quantity > 0)
       );
-      console.log("Filtered Products Count after filtering zero quantity:", filteredProducts.length);
-      console.log("Filtered Products Count after filtering zero quantity:", l3);
+      // console.log("Filtered Products Count after filtering zero quantity:", filteredProducts.length);
+      // console.log("Filtered Products Count after filtering zero quantity:", l3);
 
       // Apply sorting
       if (sortBy) {
@@ -642,13 +656,13 @@ router.get(
         });
       }
 
-      console.log("Final Filtered Products Count:", filteredProducts.length);
+      // console.log("Final Filtered Products Count:", filteredProducts.length);
 
       // Apply pagination
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
       const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-      console.log("Paginated Products Count:", paginatedProducts.length);
+      // console.log("Paginated Products Count:", paginatedProducts.length);
 
       res.status(200).json({
         success: true,
@@ -916,7 +930,7 @@ router.put(
         }
       );
 
-      console.log("updateResultForProduct", updateResultForProduct);
+      // console.log("updateResultForProduct", updateResultForProduct);
       await existsSeller.save();
 
       res.status(200).json({
