@@ -50,6 +50,14 @@ const productSchema = new mongoose.Schema({
   subCategory: {
     type: String,
   },
+  visited:{
+    type:Boolean,
+    default:false
+  },
+  visitedAt:{
+    type: Date,
+    default: Date.now(),
+  },
   neckType: {
     type: String,
     default:"",
