@@ -38,15 +38,24 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
 
+    // Create HTML content with a button
+    const htmlMessage = `
+      <p>Hello ${user.name},</p>
+      <p>Please click the button below to activate your account:</p>
+      <a href="${activationUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Activate Account</a>
+      <p>If you did not create an account, please ignore this email.</p>
+    `;
+
     try {
       await sendMail({
         email: user.email,
         subject: "Activate your account",
-        message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+        message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`, // Fallback text version
+        html: htmlMessage, // HTML content with button
       });
       res.status(201).json({
         success: true,
-        message: `please check your email:- ${user.email} to activate your account!`,
+        message: `Please check your email (${user.email}) to activate your account!`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -55,6 +64,7 @@ router.post("/create-user", async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 
 // create activation token
 const createActivationToken = (user) => {
@@ -432,14 +442,19 @@ router.post(
     // Create reset password URL
     const resetUrl = `http://localhost:3000/password/reset/${resetToken}`;
 
-    // Send email
-    const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`;
+    // Create the email message with a button
+    const message = `
+      <p>You requested a password reset. Click the button below to reset your password:</p>
+      <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Reset Password</a>
+      <p>If you did not request this email, please ignore it.</p>
+    `;
 
     try {
       await sendMail({
         email: user.email,
         subject: "Password Recovery",
-        message,
+        message, // Send the HTML message
+        html: message // Set the HTML content
       });
 
       res.status(200).json({

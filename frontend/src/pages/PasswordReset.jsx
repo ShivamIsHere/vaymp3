@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { server } from '../server';
-
+import styles from '../styles/styles';
 const PasswordReset = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
@@ -75,6 +75,12 @@ const PasswordReset = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
+              </div>
+              <div className={`${styles.noramlFlex} w-full pt-2 mt-2`}>
+                <h4>Password successfully reset?</h4>
+                <Link to="/login" className="text-blue-600 pl-2 ">
+                  Sign in
+                </Link>
               </div>
             </div>
             <div>

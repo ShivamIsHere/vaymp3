@@ -1,12 +1,13 @@
 import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { server } from "../server";
+import styles from "../styles/styles";
 
 const SellerActivationPage = () => {
   const { activation_token } = useParams();
   const [error, setError] = useState(false);
+  const [activated, setActivated] = useState(false);
 
   useEffect(() => {
     if (activation_token) {
@@ -17,6 +18,7 @@ const SellerActivationPage = () => {
           })
           .then((res) => {
             console.log(res);
+            setActivated(true); // Set activated to true on success
           })
           .catch((err) => {
             setError(true);
@@ -24,7 +26,7 @@ const SellerActivationPage = () => {
       };
       sendRequest();
     }
-  }, []);
+  }, [activation_token]);
 
   return (
     <div
@@ -38,8 +40,15 @@ const SellerActivationPage = () => {
     >
       {error ? (
         <p>Your token is expired!</p>
+      ) : activated ? (
+        <div className="flex-col text-center">
+          <h4 className="font-bold text-center">Your account successfully activated!</h4>
+          <Link to="/shop-login" className="text-blue-600 pl-2 text-center">
+            Sign in
+          </Link>
+          </div>
       ) : (
-        <p>Your account has been created suceessfully!</p>
+        <p>Activating your account...</p>
       )}
     </div>
   );

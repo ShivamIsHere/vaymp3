@@ -1,20 +1,19 @@
-import { React, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import { FidgetSpinner } from "react-loader-spinner";
-
+import styles from "../../styles/styles";
 const ShopResetPassword = () => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     try {
       const res = await axios.put(`${server}/shop/shop-password/reset/${token}`, {
         password,
@@ -75,8 +74,15 @@ const ShopResetPassword = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
+              <div className={`${styles.noramlFlex} w-full pt-2 mt-2`}>
+                <h4>Password successfully reset?</h4>
+                <Link to="/shop-login" className="text-blue-600 pl-2">
+                  Sign in
+                </Link>
+              </div>
+
             </div>
-            <div>
+            <div className="flex justify-between items-center">
               {loading ? (
                 <div
                   style={{
@@ -102,6 +108,8 @@ const ShopResetPassword = () => {
                   Reset Password
                 </button>
               )}
+              
+              
             </div>
           </form>
         </div>
