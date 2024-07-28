@@ -156,6 +156,7 @@ const Header = ({ activeHeading }) => {
       navigate(`/search/${searchTerm}`);
       setSearchTerm("");
       setSearchData(null);
+      // window.location.reload();
     }
   };
 
@@ -164,6 +165,8 @@ const Header = ({ activeHeading }) => {
       navigate(`/search/${mobileSearchTerm}`);
       mobileSetSearchTerm("");
       mobileSetSearchData(null);
+      window.location.reload();
+
     }
   };
   const handleMobileSearchClick = () => {

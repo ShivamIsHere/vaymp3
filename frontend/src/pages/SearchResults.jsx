@@ -9,7 +9,8 @@ import styles from "../styles/styles";
 import axios from "axios";
 import { server } from "../server";
 import { useMediaQuery } from 'react-responsive';
-
+import { BiSortAlt2 } from 'react-icons/bi';
+import { FaFilter } from 'react-icons/fa';
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap  } from "react-icons/ai";
 import {
   categoriesData,
@@ -30,6 +31,7 @@ import {
 } from "../static/data"; // Assuming data is imported correctly
 import ClipLoader from "react-spinners/ClipLoader";
 import BasicPagination from "./BasicPagination";
+import SortFilterButtons from "./SortFilterButtons";
 
 const SearchResults = () => {
   const { query } = useParams();
@@ -129,7 +131,7 @@ const SearchResults = () => {
     setFilters(initialFilters);
     setSortBy(initialSortBy);
     setCurrentPage(initialPage);
-  }, []);
+  }, [query]);
 
   const updateURLParams = (newFilters) => {
     const searchParams = new URLSearchParams();
@@ -494,17 +496,30 @@ console.log("hfejshmehgmfe,")
           <div className={`${styles.section}`}>
           {totalPage === 0 && (
               <h1 className="text-center text-xl font-semibold text-gray-700 mt-4 mb-1">
-                No Product Found... Here are some suggested Products
+                No Product Found
               </h1>
 
             )}{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
             <h1 className="text-xl font-semibold mb-4">Search Results for: {query}</h1>
-        <div className="flex flex-col md:flex-row">
+
+         {/* <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around items-center border-t border-gray-200">
+         <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded "    onClick={toggleDrawer}>
+        <BiSortAlt2 className="w-5 h-5 text-gray-500 opacity-75" />
+        <span className="font-medium text-sm">SORT</span>
+      </button>
+      <div className="w-px h-6 bg-gray-400 opacity-50 mx-2"></div>
+      <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded"  onClick={toggleSortDrawer}>
+        <FaFilter className="w-4 h-4 text-gray-500 opacity-75" />
+        <span className="font-medium text-sm">FILTER</span>
+      </button>
+      </div> */}
+
+      <div className="flex flex-col lg:flex-row">
           {/* Add your filters and sorting here */}
         </div>
-            {isValid===true&&<div className="flex -mb-3 sticky top-28 z-10 mt-2">
-              <div className="w-1/2 p-0 m-0">
+            {isValid===true&&<div className="lg:hidden sticky z-20">
+              {/* <div className="w-1/2 p-0 m-0">
                 <button
                   className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
                   onClick={toggleDrawer}
@@ -512,8 +527,8 @@ console.log("hfejshmehgmfe,")
                    <AiFillFilter className="mr-2 text-xl text-gray-800" />
                   Filter
                 </button>
-              </div>
-              <div className="w-1/2 p-0 m-0">
+              </div> */}
+              {/* <div className="w-1/2 p-0 m-0">
                 <button
                   className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
                   onClick={toggleSortDrawer}
@@ -521,8 +536,21 @@ console.log("hfejshmehgmfe,")
                    <AiOutlineSwap className="text-xl text-gray-800 mr-2" />
                   Sort
                 </button>
-              </div>
-            </div>}
+              </div> */}
+      
+         <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around items-center border-t border-gray-300 bg-zinc-100">
+         <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded" onClick={toggleDrawer}>
+        <FaFilter className="w-4 h-4 text-gray-600 opacity-75" />
+        <span className="font-bold text-base">FILTER</span>
+      </button>
+      <div className="w-px h-10 bg-gray-500 opacity-75"></div>
+      <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded" onClick={toggleSortDrawer}>
+        <BiSortAlt2 className="w-6 h-6 text-gray-600 opacity-75" />
+        <span className="font-bold text-base">SORT</span>
+      </button>
+      </div>
+
+       </div>}
 
             {/* for larger screen */}
 
@@ -530,9 +558,9 @@ console.log("hfejshmehgmfe,")
             {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 justify-between items-center"
               style={{ zIndex: 1 }}
             >
-              <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
+              <h4 className="text-4xl font-semibold text-gray-700 hidden lg:block">New Arrivals</h4>
               <button
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm mr-11 ml-auto hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm mr-11 ml-auto hidden lg:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
                 onClick={toggleDrawer}
               >
                   <AiFillFilter className="text-xl text-gray-800" />
@@ -541,7 +569,7 @@ console.log("hfejshmehgmfe,")
 
 
               <button
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden lg:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
                 onClick={toggleSortDrawer}
               >
                    <AiOutlineSwap className="text-xl text-gray-800" />
@@ -938,12 +966,17 @@ console.log("hfejshmehgmfe,")
             </div>
             {getAllProducts().length === 0 ? (
               // <div className="text-center text-gray-500 mt-4">No products found</div>
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center lg:hidden">
               <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
             </div>
             ) : (
               <>
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
+              {totalPage===0&&
+                <h1 className="text-center text-xl font-semibold text-gray-700 mt-4 mb-1">
+                Here are some suggested Products
+              </h1>
+              }
+            <div className="grid grid-cols-2 lg:grid-cols-2 lg:hidden gap-1 w-full mx-0">
               {getAllProducts().map((product) => (
                 <ProductCard data={product} key={product._id} />
               ))}
@@ -952,7 +985,7 @@ console.log("hfejshmehgmfe,")
             )}
             {filteredDatas.length === 0 ? (
               // <div className="text-center text-gray-500 mt-4">No products found</div>
-              <div className="flex justify-center items-center">
+              <div className=" hidden lg:flex justify-center items-center">
               <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
             </div>
             ): (
@@ -966,7 +999,7 @@ console.log("hfejshmehgmfe,")
             )}
 
             {/* Loader for Medium and Small Screens */}
-            <div ref={loadMoreRef} className="mt-4 flex justify-center md:hidden">
+            <div ref={loadMoreRef} className="mt-4 flex justify-center lg:hidden">
               {isLoading===true && <ClipLoader
                   color="#2874F0"
                   size={55}
@@ -979,7 +1012,7 @@ console.log("hfejshmehgmfe,")
           {/* Pagination for Large Screens */}
             <div className="flex flex-col flex-1 p-4">
         
-        <div className="mt-4 justify-center hidden md:flex">
+        <div className="mt-4 justify-center hidden lg:flex">
           <BasicPagination count={totalPages} page={currentPage} onChange={handlePageChange} />
         </div>
       </div>
@@ -987,7 +1020,7 @@ console.log("hfejshmehgmfe,")
           {/* Sort Drawer */}
           {sortDrawerOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-end">
-              <div className="bg-white w-full md:w-full p-4 overflow-y-auto rounded-t-lg">
+              <div className="bg-white w-full lg:w-full p-4 overflow-y-auto rounded-t-lg">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-lg font-bold">Sort Options</h2>
                   <AiOutlineClose className="cursor-pointer" onClick={toggleSortDrawer} />

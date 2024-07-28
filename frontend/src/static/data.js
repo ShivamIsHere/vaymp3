@@ -265,7 +265,7 @@ export const navItems = [
   ];
 
   export const subCategory = [
-    { id: 1, title: "Tshirt" },
+    { id: 1, title: "T-shirts" },
     { id: 2, title: "Blouses" },
     { id: 3, title: "Shirts" },
     { id: 4, title: "Tank tops" },
@@ -736,7 +736,7 @@ export const navItems = [
     },
     {
       id: 11,
-      title: "Running Shoes"
+      title: "Running"
     },
     {
       id: 12,
@@ -776,10 +776,6 @@ export const navItems = [
     },
     {
       id: 21,
-      title: "Shoes"
-    },
-    {
-      id: 22,
       title: "Crocs"
     }
   ];

@@ -75,8 +75,6 @@ const CreateProduct = () => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
 
-    setImages([]);
-
     files.forEach((file) => {
       const reader = new FileReader();
 
@@ -536,45 +534,38 @@ console.log("category",category)
         </div>
         <br />
         <div>
-          <label className="pb-2">
-            Upload Images <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            name=""
-            id="upload"
-            className="hidden"
-            multiple
-            onChange={handleImageChange}
-          />
-          <div className="w-full flex items-center flex-wrap">
-            <label htmlFor="upload">
-              <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
-            </label>
+      <label className="pb-2">
+        Upload Images <span className="text-red-500">*</span>
+      </label>
+      
+      <div className="w-full flex items-center flex-wrap">
+        {images &&
+          images.map((image, index) => (
+            <div key={index} className="relative m-2">
+              <img
+                src={image}
+                alt={`Product ${index + 1}`}
+                className="h-[120px] w-[120px] object-cover"
+              />
+              <AiOutlineClose 
+                onClick={() => handleDeleteImage(index)}
+                className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full cursor-pointer"
+              />
             </div>
-
-          {/* Update to display delete buttons next to each image */}
-          <div className="w-full flex items-center flex-wrap">
-            {images &&
-              images.map((image, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={image}
-                    alt={`Product ${index + 1}`}
-                    className="h-[120px] w-[120px] object-cover m-2"
-                  />
-                  <button
-                    onClick={() => handleDeleteImage(index)}
-                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
-                  >
-                    <AiOutlineClose />
-                  </button>
-                </div>
-  ))}
-
-          </div>
+          ))}
         
-        </div>
+        {/* Label to show the file input when clicked */}
+        <label htmlFor="upload" className="cursor-pointer m-2">
+          <AiOutlinePlusCircle size={30} color="#555" />
+        </label>
+        <input
+          type="file"
+          id="upload"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+      </div>
+    </div>
 
         <div>
         <div>

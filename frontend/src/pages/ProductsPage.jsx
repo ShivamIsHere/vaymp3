@@ -343,7 +343,8 @@ const ProductsPage = () => {
                   <ProductCard data={product} key={product._id} />
                 ))}
               </div>
-              <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 pt-2">                {data.map((product) => (
+              <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 pt-2">                
+                {data.map((product) => (
                   <ProductCard data={product} key={product._id} />
                 ))}
               </div>

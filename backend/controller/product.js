@@ -307,10 +307,10 @@ router.get(
       const { query, page = 1, limit = 5, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy, shoeOccasions, accessorySubCategories, footwearSubCategories,shoeSizes } = req.query;
       let words = query.toLowerCase().split(" ");
        let avail=query.toLowerCase().includes("t shirt")|| query.toLowerCase().includes("t-shirt")|| query.toLowerCase().includes("tshirt")|| query.toLowerCase().includes("t shirts")|| query.toLowerCase().includes("tshirts")|| query.toLowerCase().includes("t-shirtes")|| query.toLowerCase().includes("t shirtes")|| query.toLowerCase().includes("tshirtes");
-       let avail2=query.toLowerCase()==("shirt")|| query.toLowerCase()==("Shirt")|| query.toLowerCase()==("Shirts")|| query.toLowerCase()==("shirts");
-
-       console.log("query22222",avail,query)
-       console.log("query22222",avail2,query)
+       let avail2 = words.some(word => ["shirt", "shirts", "Shirt", "Shirts", "Shirt's", "Shirts'", "Shirt'"].some(validWord => word.toLowerCase() === validWord.toLowerCase()));
+ 
+       console.log("query22222",query,avail2)
+      //  console.log("query22222",avail2,query)
 
        const stopWords = [
         "for", "in", "the", "and", "a", "of", "to", "is", "on", "at", "by", "with",
@@ -338,102 +338,173 @@ router.get(
       );
       let l1=filteredProducts.length;
       // console.log(filteredProducts);
-      // console.log("11111111111111111", filteredProducts.length);
+      console.log("11111111111111111", filteredProducts.length);
 
       // Apply gender filter
-      if (quer.includes("female") || quer.includes("females") || quer.includes("women") || quer.includes("woman") ||
-          quer.includes("womans") || quer.includes("womens") || quer.includes("ladies") || quer.includes("lady") ||
-          quer.includes("girl") || quer.includes("gurl") || quer.includes("girls") || quer.includes("ladki") ||
-          quer.includes("ldki") || quer.includes("gurls")) {
-        filteredProducts = filteredProducts.filter(val => 
-          val.gender?.toLowerCase() === "women" || 
-          val.gender?.toLowerCase() === "girls" || 
-          val.gender?.toLowerCase().includes('girl') || 
-          val.gender?.toLowerCase() === "boys & girls"
-        );
-      } else if (quer.includes("male") || quer.includes("males") || quer.includes("mans") || quer.includes("boys") || 
-                 quer.includes("men") || quer.includes("mens") || quer.includes("guys") || quer.includes("ladka") || 
-                 quer.includes("boy") || quer.includes("man")) {
-        filteredProducts = filteredProducts.filter(val => 
-          val.gender?.toLowerCase() === "men" || 
-          val.gender?.toLowerCase() === "boys & girls" || 
-          val.gender?.toLowerCase().includes('boy') || 
-          val.gender?.toLowerCase().includes('boys')
-        );
-      }
+      // Apply gender filter
+const genderKeywords = [
+  "female", "females", "women", "woman", "womans", "womens", "women's", "womens'", "women'", "woman'", "womans'", "woman's",
+  "ladies", "ladie's", "lady", "girl", "gurl", "girls", "ladki", "ldki", "gurls","lady'","lady's","ladys'","ladies'","ladies's",
+];
 
-      // Apply category filter
-      if (quer.includes("shoes") || quer.includes("shoe") || quer.includes("joota") || quer.includes("juta") || 
-          quer.includes("jhoota") || quer.includes("jutta")|| quer.includes("slipper")|| quer.includes("slippers")|| quer.includes("sliper")|| quer.includes("slipers")) {
-        filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "shoes");
-        // console.log("22222222222222222", filteredProducts.length);
+const maleKeywords = [
+  "male", "males", "mans", "boys", "men", "mens", "men's", "man's", "mens'", "mans'", "guys", "ladka", "boy", "man"
+];
 
-      } else if (quer.includes("accessories") || quer.includes("sunglasses") || quer.includes("jhumka") || quer.includes("jumka") ||
-                 quer.includes("caps") || quer.includes("earrings") || quer.includes("watches") || quer.includes("belts") ||
-                 quer.includes("bracelets") || quer.includes("bags") || quer.includes("purse") || quer.includes("wallets") ||
-                 quer.includes("trolley") || quer.includes("hat") || quer.includes("scarfs") || quer.includes("stoles") ||
-                 quer.includes("leatherbelts") || quer.includes("smartwatches") || quer.includes("digitalwatches") ||
-                 quer.includes("analogwatches") || quer.includes("hairbands") || quer.includes("gloves") ||
-                 quer.includes("drivinggloves")) {
-        filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "accessories");
-        // console.log("333333333333333", filteredProducts.length);
+words = words.filter(keyword => {
+  if (genderKeywords.includes(keyword.toLowerCase())) {
+    filteredProducts = filteredProducts.filter(val => 
+      val.gender?.toLowerCase() === "women" || 
+      val.gender?.toLowerCase() === "girls" || 
+      val.gender?.toLowerCase().includes('girl') || 
+      val.gender?.toLowerCase() === "boys & girls"
+    );
+    console.log("aaaaaaaaaaaaaaaaaaaa", filteredProducts.length);
+    return false; // Remove the keyword from words array after filtering
+  } else if (maleKeywords.includes(keyword.toLowerCase())) {
+    filteredProducts = filteredProducts.filter(val => 
+      val.gender?.toLowerCase() === "men" || 
+      val.gender?.toLowerCase() === "boys & girls" || 
+      val.gender?.toLowerCase().includes('boy') || 
+      val.gender?.toLowerCase().includes('boys')
+    );
+    console.log("bbbbbbbbbbbbbbbbbbbbbbbq", filteredProducts.length);
+    return false; // Remove the keyword from words array after filtering
+  }
+  return true; // Keep the keyword if it does not match
+});
 
-      } else if (quer.includes("clothes") || quer.includes() || quer.includes("dresses") || quer.includes("cloths") || 
-                 quer.includes("cloth") || quer.includes("kapra") || quer.includes("dress")) {
-        filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() !== "accessories" && val.category?.toLowerCase() !== "shoes");
-        // console.log("44444444444444444", filteredProducts.length);
+// Apply category filter
+const shoesCategoryKeywords = [
+  "shoes", "shoe", "shoe's", "shoe'", "shoes'", "joota", "juta", "jhoota", "jutta", "slipper", "slippers", "sliper", "slipers"
+];
 
-      }
-      // console.log("5555555555555555555555", filteredProducts.length);
+const accessoriesCategoryKeywords = [
+  "accessories", "sunglasses", "jhumka", "jumka", "caps", "earrings", "watches", "belts",
+  "bracelets", "bags", "purse", "wallets", "trolley", "hat", "scarfs", "stoles",
+  "leatherbelts", "smartwatches", "digitalwatches", "analogwatches", "hairbands", "gloves", "drivinggloves"
+];
 
+const clothesCategoryKeywords = [
+  "clothes", "dresses", "cloths", "cloth", "kapra", "dress"
+];
+
+words = words.filter(keyword => {
+  if (shoesCategoryKeywords.includes(keyword.toLowerCase())) {
+    filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "shoes");
+    console.log("22222222222222222", filteredProducts.length);
+    return false; // Remove the keyword from words array after filtering
+  } else if (accessoriesCategoryKeywords.includes(keyword.toLowerCase())) {
+    filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() === "accessories");
+    console.log("333333333333333", filteredProducts.length);
+    return false; // Remove the keyword from words array after filtering
+  } else if (clothesCategoryKeywords.includes(keyword.toLowerCase())) {
+    filteredProducts = filteredProducts.filter(val => val.category?.toLowerCase() !== "accessories" && val.category?.toLowerCase() !== "shoes");
+    console.log("44444444444444444", filteredProducts.length);
+    return false; // Remove the keyword from words array after filtering
+  }
+  return true; // Keep the keyword if it does not match
+});
+
+      // Apply keyword filtering with remaining words
+      const clothesKeywords = [
+        "blouses", "tank tops", "sweaters", "hoodies", "jeans", "trousers", "shorts",
+        "skirts", "leggings", "jackets", "coats", "blazers", "vests", "raincoats",
+        "maxi", "cocktail", "sundresses", "sports bras", "gym tops", "yoga pants", "track pants",
+        "running shorts", "pajamas", "robes", "sweatpants", "lounge tops", "half pants", "bras", "panties", "boxers",
+        "briefs", "undershirts", "suits", "tuxedos"
+      ];
+      
+      const shoesKeywords = [
+        "flip flops", "slide sandals", "house slippers", "thong slippers", "gladiator sandals", "sport sandals", "wedge sandals", "heeled sandals",
+        "flat sandals", "sneakers", "running shoes", "loafers", "oxfords", "brogues", "boots", "heels", "flats",
+        "moccasins", "derbies", "espadrilles", "crocs"
+      ];
+      
+      // Filter products based on clothesKeywords
+      words = words.filter(keyword => {
+        if (clothesKeywords.includes(keyword.toLowerCase())) {
+          filteredProducts = filteredProducts.filter(product => product.subCategory?.toLowerCase().includes(keyword.toLowerCase()));
+          return false; // Remove the keyword from words array after filtering
+        }
+        return true; // Keep the keyword if it does not match
+      });
+      
+      // Filter products based on shoesKeywords
+      words = words.filter(keyword => {
+        if (shoesKeywords.includes(keyword.toLowerCase())) {
+          filteredProducts = filteredProducts.filter(product => product.footwearSubCategories?.toLowerCase().includes(keyword.toLowerCase()));
+          return false; // Remove the keyword from words array after filtering
+        }
+        return true; // Keep the keyword if it does not match
+      });
+      
+      console.log("Filtered Products after keyword check:", filteredProducts.length);
+      console.log("Remaining words after filtering:", words);
+      
       // Apply keyword filtering with remaining words
       const filterByWord = (product, word) => {
         const productProperties = [
+          product?.subCategory,
+          product?.category,
           product?.size,
           product?.color,
-          product?.subCategory,
           product?.fabric,
           product?.occasion,
           product?.fit,
           product?.sleeveType,
           product?.neckType,
-          product?.name,  
-          product?.tags,
+          // product?.tags,
           product?.brand,
           product?.shoeOccasions,
           product?.accessorySubCategories,
           product?.footwearSubCategories,
-          product?.shoeSizes
+          product?.shoeSizes,
         ];
-        return productProperties.some(prop => prop && prop.toLowerCase().includes(word));
+        return productProperties.some(prop => prop && prop.toLowerCase().includes(word.toLowerCase()));
       };
-      // console.log("666666666666666666666666", filteredProducts.length);
-
-      words.forEach((word) => {
+      
+      console.log("Filtered Products length before filtering by remaining words:", filteredProducts.length);
+      
+      words.forEach((word, index) => {
+        console.log(`Filtering with word (${index}): ${word}`);
         const filtered = filteredProducts.filter(product => filterByWord(product, word));
+        console.log(`Filtered length after word (${index}): ${filtered.length}`);
+        
         if (filtered.length > 0) {
+          filteredProducts = filtered;
+          console.log(`Updated filteredProducts after word (${index}): ${filteredProducts.length}`);
+        }
+         else if (!avail && !avail2 && filtered.length == 0) {
+          // Only update filteredProducts to an empty array if neither avail nor avail2 is true
           filteredProducts = filtered;
         }
       });
-      // console.log("777777777777777", filteredProducts.length);
+      
+      console.log("Filtered Products after filtering by remaining words:", filteredProducts.length);
+      
+      
+      console.log("Filtered Products after filtering by remaining words:", filteredProducts.length);
+      
+      console.log("777777777777777", filteredProducts.length);
 
       if(avail){
         // console.log("lllkjl23",filteredProducts[0])
         const a1=filteredProducts.filter((val)=>{
           console.log("lllll67",val.subCategory,val)
-          return val?.subCategory.includes("Tshirt")
+          return val?.subCategory?.includes("T-shirts")
         })
-        // console.log("lllkjl899",a1.length)
+        console.log("lllkjl899",a1.length)
         filteredProducts=a1;
       }
 
       if(avail2){
         // console.log("lllkjl23",filteredProducts[0])
         const a2=filteredProducts.filter((val)=>{
-          console.log("lllll67",val.subCategory,val)
-          return val?.subCategory.includes("Shirts")
+          // console.log("lllll67",val.subCategory,val)
+          return val?.subCategory?.includes("Shirts")
         })
-        // console.log("lllkjl899",a1.length)
+        console.log("lllkjl899",a2.length)
         filteredProducts=a2;
       }
       let l2 = filteredProducts.length;
@@ -449,7 +520,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after color filter:", filteredProducts.length);
+      console.log("Filtered Products Count after color filter:", filteredProducts.length);
   
       if (subCategory) {
         const subCategoryArray = subCategory.split(',').map(c => c.trim());
@@ -460,7 +531,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after subCategory filter:", filteredProducts.length);
+      console.log("Filtered Products Count after subCategory filter:", filteredProducts.length);
 
       if (neckType) {
         const neckTypeArray = neckType.split(',').map(c => c.trim());
@@ -471,7 +542,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after neckType filter:", filteredProducts.length);
+      console.log("Filtered Products Count after neckType filter:", filteredProducts.length);
 
       if (sleeveType) {
         const sleeveTypeArray = sleeveType.split(',').map(c => c.trim());
@@ -482,7 +553,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after sleeveType filter:", filteredProducts.length);
+      console.log("Filtered Products Count after sleeveType filter:", filteredProducts.length);
 
       if (shoeSizes) {
         const sizesArray = shoeSizes.split(',').map(s => s.trim());
@@ -502,7 +573,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after size filter:", filteredProducts.length);
+      console.log("Filtered Products Count after size filter:", filteredProducts.length);
 
       if (brand) {
         const brandsArray = brand.split(',').map(c => c.trim());
@@ -513,7 +584,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after brand filter:", filteredProducts.length);
+      console.log("Filtered Products Count after brand filter:", filteredProducts.length);
 
       if (fit) {
         const fitsArray = fit.split(',').map(c => c.trim());
@@ -524,7 +595,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after fit filter:", filteredProducts.length);
+      console.log("Filtered Products Count after fit filter:", filteredProducts.length);
 
       if (occasion) {
         const occasionsArray = occasion.split(',').map(c => c.trim());
@@ -535,7 +606,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after occasion filter:", filteredProducts.length);
+      console.log("Filtered Products Count after occasion filter:", filteredProducts.length);
 
       if (shoeOccasions) {
         const shoeOccasionsArray = shoeOccasions.split(',').map(c => c.trim());
@@ -546,7 +617,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after shoeOccasions filter:", filteredProducts.length);
+      console.log("Filtered Products Count after shoeOccasions filter:", filteredProducts.length);
 
       if (accessorySubCategories) {
         const accessorySubCategoriesArray = accessorySubCategories.split(',').map(c => c.trim());
@@ -557,7 +628,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after accessorySubCategories filter:", filteredProducts.length);
+      console.log("Filtered Products Count after accessorySubCategories filter:", filteredProducts.length);
 
       if (footwearSubCategories) {
         const footwearSubCategoriesArray = footwearSubCategories.split(',').map(c => c.trim());
@@ -568,7 +639,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after footwearSubCategories filter:", filteredProducts.length);
+      console.log("Filtered Products Count after footwearSubCategories filter:", filteredProducts.length);
 
       if (fabric) {
         const fabricsArray = fabric.split(',').map(c => c.trim());
@@ -579,7 +650,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after fabric filter:", filteredProducts.length);
+      console.log("Filtered Products Count after fabric filter:", filteredProducts.length);
 
       if (gender) {
         const gendersArray = gender.split(',').map(c => c.trim());
@@ -590,7 +661,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after gender filter:", filteredProducts.length);
+      console.log("Filtered Products Count after gender filter:", filteredProducts.length);
 
       if (customerRating) {
         const ratingRanges = customerRating.split(',');
@@ -608,7 +679,7 @@ router.get(
         );
       }
 
-      // console.log("Filtered Products Count after customerRating filter:", filteredProducts.length);
+      console.log("Filtered Products Count after customerRating filter:", filteredProducts.length);
 
       if (priceRange) {
         const priceRanges = priceRange.split(',');
@@ -622,18 +693,18 @@ router.get(
         filteredProducts = filteredProducts.filter(product =>
           product.discountPrice >= minPrice && product.discountPrice <= maxPrice
         );
-        // console.log("Filtered Products Count after priceRange filter:", filteredProducts.length);
+        console.log("Filtered Products Count after priceRange filter:", filteredProducts.length);
         
       }
 
       
-      // console.log("Filtered Products Count after removing 'Event' listings:", filteredProducts.length);
+      console.log("Filtered Products Count after removing 'Event' listings:", filteredProducts.length);
 
       // Filter out products with zero quantity in all sizes
       filteredProducts = filteredProducts.filter(product =>
         product.stock.some(stockItem => stockItem.quantity > 0)
       );
-      // console.log("Filtered Products Count after filtering zero quantity:", filteredProducts.length);
+      console.log("Filtered Products Count after filtering zero quantity:", filteredProducts.length);
       // console.log("Filtered Products Count after filtering zero quantity:", l3);
 
       // Apply sorting
@@ -656,16 +727,17 @@ router.get(
         });
       }
 
-      // console.log("Final Filtered Products Count:", filteredProducts.length);
+      console.log("Final Filtered Products Count:", filteredProducts.length);
 
       // Apply pagination
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
       const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-      // console.log("Paginated Products Count:", paginatedProducts.length);
+      console.log("Paginated Products Count:", paginatedProducts.length);
 
       res.status(200).json({
         success: true,
+        message: `Total ${filteredProducts.length} Products found!`,
         products: paginatedProducts,
         totalProducts: filteredProducts.length,
         l3:l3,
