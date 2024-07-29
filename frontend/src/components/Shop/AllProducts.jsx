@@ -102,7 +102,7 @@ const AllProducts = () => {
                   </div>
                 </Link>
                 <Link to={`/product/${product._id}`} className="text-lg font-semibold hover:text-blue-500">{product.name}</Link>
-                <p className="text-gray-600">Price: Rs. {product.discountPrice}</p>
+                <p className="text-gray-600">Price: Rs. {product.ShopPrice}</p>
                 <div className="flex">
                   <select
                     className="mt-2 border p-1 rounded-md w-1/2"

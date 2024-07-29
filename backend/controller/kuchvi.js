@@ -81,7 +81,9 @@ router.get(
     
     catchAsyncErrors(async (req, res, next) => {
       try {
-        const kuchvis = await Kuchvi.find();
+        const kuchvis1 = await Kuchvi.find();
+        const kuchvis = kuchvis1.sort((a, b) => b.createdAt - a.createdAt);
+
         // console.log("refunds",refunds)
         const allKuchviRequest=kuchvis.map((i)=>({
             // refundId:i._id,
@@ -130,56 +132,60 @@ router.get(
     catchAsyncErrors(async (req, res, next) => {
       try {
         const orderId = req.params.id;
-        const { status,cancel,return1, delivered,paymentInfo,deliveredAt,returnedAt,refundStatus,refund } = req.body; // New stock object from the request body
-  
+        const { status, cancel, return1, delivered, paymentInfo, deliveredAt, returnedAt, refundStatus, refund } = req.body;
+        
         // Find the product by ID in the database
         const kuchvi = await Kuchvi.findById(orderId);
-  
-        // Check if the product exists
+        console.log("11111111",kuchvi)
         if (!kuchvi) {
           return next(new ErrorHandler(`Product not found with ID: ${orderId}`, 404));
         }
   
-        // Update the product's stock with the new stock array
-        // kuchvi.refundStatus = refundStatus;
-        // kuchvi.productId = productId;
-        // kuchvi.qty = qty;
-        if (status !== undefined) {
-          kuchvi.status = status;
+        // Find the seller by ID
+        const seller = await Shop.findById(kuchvi.shopId);
+        console.log("222222222222",seller)
+
+        if (!seller) {
+          return next(new ErrorHandler(`Seller not found with ID: ${kuchvi.shopId}`, 404));
         }
-        if (refund !== undefined) {
-          kuchvi.refund = refund;
+        const product = await Product.findById(kuchvi.productId);
+        console.log("222222222222",product)
+
+        if (!product) {
+          return next(new ErrorHandler(`Seller not found with ID: ${kuchvi.productId}`, 404));
         }
-        if (cancel !== undefined) {
-          kuchvi.cancel = cancel;
-        }
+        // Update fields conditionally
+        if (status !== undefined) kuchvi.status = status;
+        if (refund !== undefined) kuchvi.refund = refund;
+        if (cancel !== undefined) kuchvi.cancel = cancel;
         if (delivered !== undefined) {
           kuchvi.delivered = delivered;
+          if (delivered) {
+            seller.availableBalance += kuchvi.shopPrice;
+            product.sold_out +=1;
+            kuchvi.deliveredAt = Date.now;
+          }
         }
-        if (return1 !== undefined) {
-          kuchvi.return1 = return1;
-        }
+        if (return1 !== undefined) kuchvi.return1 = return1;
         if (refundStatus !== undefined) {
           kuchvi.refundStatus = refundStatus;
+          if (refundStatus) {
+            seller.availableBalance -= kuchvi.shopPrice;
+            product.sold_out -=1;
+            kuchvi.returnedAt = Date.now;
+          }
         }
-        if (paymentInfo !== undefined) {
-          kuchvi.paymentInfo = paymentInfo;
-        }
-        if (deliveredAt !== undefined) {
-          kuchvi.deliveredAt=Date.now();
-        }
-        if (returnedAt !== undefined) {
-          kuchvi.returnedAt=Date.now();
-        }
-        
+        if (paymentInfo !== undefined) kuchvi.paymentInfo = paymentInfo;
   
-        // Save the updated product
+        // Save the updated product and seller
         await kuchvi.save();
-  
+        await seller.save();
+        await product.save();
+
         // Send success response
         res.status(200).json({
           success: true,
-          message: "Product stock updated successfully",
+          message: "Product and seller information updated successfully",
           kuchvi,
         });
       } catch (error) {
