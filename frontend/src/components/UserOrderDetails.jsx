@@ -29,6 +29,9 @@ const UserOrderDetails = () => {
   const [isReturnable, setIsReturnable] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [timerInterval, setTimerInterval] = useState(null);
+  const [opn, setOpn] = useState(false);
+  const [opens, setOpens] = useState(false);
+
 
   const { id } = useParams();
   useEffect(() => {
@@ -192,6 +195,55 @@ const UserOrderDetails = () => {
     window.location.reload();
   };
 
+  const handleCancelClick = async () => {
+    try {
+      console.log("================???????", data);
+      const response = await axios.patch(
+        `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
+        {
+          cancel: true,
+          status: "cancel Request",
+        }
+      );
+
+      if (response.status >= 200 && response.status < 300) {
+        console.log("Stock updated successfully");
+      } else {
+        throw new Error(
+          `Failed to update stock - Unexpected status code: ${response.status}`
+        );
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating stock:", error);
+    }
+  };
+
+
+  const handleReturnClick = async () => {
+    try {
+      console.log("================???????", data);
+      const response = await axios.patch(
+        `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
+        {
+          return1: true,
+          returnedAt: Date.now(),
+          status: "Return Request",
+        }
+      );
+
+      if (response.status >= 200 && response.status < 300) {
+        console.log("Stock updated successfully");
+      } else {
+        throw new Error(
+          `Failed to update stock - Unexpected status code: ${response.status}`
+        );
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating stock:", error);
+    }
+  };
   return (
     <div className={`py-4 min-h-0 ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -480,29 +532,9 @@ const UserOrderDetails = () => {
         disabled={
             !isReturnable || data.status == "Returned" ? true : data.return1
           }
-          onClick={async () => {
-            // Handle return logic here
-            console.log("================???????", data);
-            const response = await axios.patch(
-              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
-              {
-                return1: true, // Update the stock value in the request body
-                returnedAt: Date.now(),
-                status: "Return Request",
-              }
-            );
-
-            if (response.status >= 200 && response.status < 300) {
-              console.log("Stock updated successfully");
-            } else {
-              throw new Error(
-                `Failed to update stock - Unexpected status code: ${response.status}`
-              );
-            }
-            window.location.reload();
-          }}
+          onClick={() => setOpens(true)}
         >
-          Return
+          {data.status === "Returned" || data.return1 ? 'Returned' : 'Return'}
         </Button>
       ) : (
         <Button
@@ -515,49 +547,62 @@ const UserOrderDetails = () => {
           }}
           disabled={data.status == "cancel Request" ? true : data.cancel}
           // disabled={data.cancel}
-          onClick={async () => {
-            console.log("================???????", data);
-            // const id= data._id
-            const orderId = data.orderid;
-            const productId = data.productid;
-            const size = data.size;
-            const qty = 1;
-            const userId = data.userId;
-            const status = data.status;
-            const shopId = data.shopId;
-            const shopPrice = data.shopPrice;
-            const markedPrice = data.markedPrice;
-            const discountPrice = data.discountPrice;
-            const shippingAddress = data.address;
-            const refundStatus = data.refundStatus;
-            const user = data.user;
-            const paymentInfo = data.paymentInfo;
-            const productName = data.productName;
-            const product = data.product;
-            const cancel = data.cancel;
-            const delivered = data.delivered;
-            const img = data.image;
-            const kuchviId = data.kuchviId;
-            const response = await axios.patch(
-              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
-              {
-                cancel: true, // Update the stock value in the request body
-                status: "cancel Request",
-              }
-            );
-
-            if (response.status >= 200 && response.status < 300) {
-              console.log("Stock updated successfully");
-            } else {
-              throw new Error(
-                `Failed to update stock - Unexpected status code: ${response.status}`
-              );
-            }
-            window.location.reload();
-          }}
+          onClick={() => setOpn(true)}
         >
-          Cancel
+          {data.status === "cancel Request" || data.cancel ? 'Cancelled' : 'Cancel'}        
         </Button>
+      )}
+      {opn && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpn(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Are you sure you wanna cancel this order?
+            </h3>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpn(false)}
+              >
+                No
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => { setOpn(false); handleCancelClick();}}
+              >
+                Yes
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {opens && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpens(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Are you sure you wanna Return this Product?
+            </h3>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpens(false)}
+              >
+                No
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => { setOpens(false); handleReturnClick();}}
+              >
+                Yes
+              </div>
+            </div>
+          </div>
+        </div>
       )}
       </div>
       </div>
@@ -569,45 +614,25 @@ const UserOrderDetails = () => {
         onClick={handleMessageSubmit}
       >
         <span className="font-medium text-sm flex items-center">SEND MESSAGE</span>
-        </div>
-      
-      {data.status == "Delivered" ||
-      data.status == "Returned" ||
-      data.status == "Return Request" ? (
-        <Button
-        className={`${styles.button} rounded-[10px] h-11`}
-        variant="contained"
-        style={{ backgroundColor: !isReturnable || data.status === "Returned" || data.return1 ? '#bfdbfe' : '#60a5fa', 
-          color: !isReturnable || data.status === "Returned" || data.return1 ? '#a0aec0' : '#000',
-          borderRadius: '12px'
-        }}          
-        disabled={
-            !isReturnable || data.status == "Returned" ? true : data.return1
-          }
-          onClick={async () => {
-            // Handle return logic here
-            console.log("================???????", data);
-            const response = await axios.patch(
-              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
-              {
-                return1: true, // Update the stock value in the request body
-                returnedAt: Date.now(),
-                status: "Return Request",
-              }
-            );
+      </div>
 
-            if (response.status >= 200 && response.status < 300) {
-              console.log("Stock updated successfully");
-            } else {
-              throw new Error(
-                `Failed to update stock - Unexpected status code: ${response.status}`
-              );
-            }
-            window.location.reload();
+      {data.status === "Delivered" ||
+      data.status === "Returned" ||
+      data.status === "Return Request" ? (
+        <Button
+          className={`${styles.button} rounded-[10px] h-11`}
+          variant="contained"
+          style={{
+            backgroundColor: !isReturnable || data.status === "Returned" || data.return1 ? '#bfdbfe' : '#60a5fa',
+            color: !isReturnable || data.status === "Returned" || data.return1 ? '#a0aec0' : '#000',
+            borderRadius: '12px'
           }}
+          disabled={!isReturnable || data.status === "Returned" ? true : data.return1}
+          onClick={() => setOpens(true)}
         >
-          Return
+          {data.status === "Returned" || data.return1 ? 'Returned' : 'Return'}
         </Button>
+        
       ) : (
         <Button
           className={`${styles.button} rounded-[4px] h-11`}
@@ -615,55 +640,68 @@ const UserOrderDetails = () => {
           style={{
             backgroundColor: data.status === "cancel Request" || data.cancel ? '#bfdbfe' : '#60a5fa',
             color: data.status === "cancel Request" || data.cancel ? '#a0aec0' : '#000',
-            borderRadius: '12px' // Change border radius to 20px
+            borderRadius: '12px'
           }}
-          disabled={data.status == "cancel Request" ? true : data.cancel}
-          // disabled={data.cancel}
-          onClick={async () => {
-            console.log("================???????", data);
-            // const id= data._id
-            const orderId = data.orderid;
-            const productId = data.productid;
-            const size = data.size;
-            const qty = 1;
-            const userId = data.userId;
-            const status = data.status;
-            const shopId = data.shopId;
-            const shopPrice = data.shopPrice;
-            const markedPrice = data.markedPrice;
-            const discountPrice = data.discountPrice;
-            const shippingAddress = data.address;
-            const refundStatus = data.refundStatus;
-            const user = data.user;
-            const paymentInfo = data.paymentInfo;
-            const productName = data.productName;
-            const product = data.product;
-            const cancel = data.cancel;
-            const delivered = data.delivered;
-            const img = data.image;
-            const kuchviId = data.kuchviId;
-            const response = await axios.patch(
-              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
-              {
-                cancel: true, // Update the stock value in the request body
-                status: "cancel Request",
-              }
-            );
-
-            if (response.status >= 200 && response.status < 300) {
-              console.log("Stock updated successfully");
-            } else {
-              throw new Error(
-                `Failed to update stock - Unexpected status code: ${response.status}`
-              );
-            }
-            window.location.reload();
-          }}
+          disabled={data.status === "cancel Request" ? true : data.cancel}
+          onClick={() => setOpn(true)}
         >
-          Cancel
+          {data.status === "cancel Request" || data.cancel ? 'Cancelled' : 'Cancel'}        
         </Button>
       )}
-      </div>
+
+      {opn && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpn(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Are you sure you wanna cancel this order?
+            </h3>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpn(false)}
+              >
+                No
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => { setOpn(false); handleCancelClick();}}
+              >
+                Yes
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {opens && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpens(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Are you sure you wanna Return this Product?
+            </h3>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpens(false)}
+              >
+                No
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => { setOpens(false); handleReturnClick();}}
+              >
+                Yes
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
       <br />
     </div>
   );

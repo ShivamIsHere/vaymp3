@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllOrdersOfUser } from "../../redux/actions/order";
 import OrderCard from "./OrderCard";
+import { Hourglass } from "react-loader-spinner";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -53,6 +54,7 @@ const ProfileContent = ({ active }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateUserInformation(name, email, phoneNumber, password));
+    toast.success("Profile Updated");
   };
 
   const handleEmailBlur = () => {

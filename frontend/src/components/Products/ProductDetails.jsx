@@ -24,9 +24,11 @@ import { addTocart, updateTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 import Ratings from "./Ratings";
 import axios from "axios";
-// import { BsSortNumericDownAlt } from "react-icons/bs";
+import Cart from "../cart/Cart";
+import { BsHandbag } from "react-icons/bs";
 
 const ProductDetails =  ({ data }) => {
+  const [openCart, setOpenCart] = useState(false);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
@@ -144,7 +146,9 @@ const ProductDetails =  ({ data }) => {
             toast.error("Item already in cart!");
           }else{
         dispatch(updateTocart(newCart));
-        toast.success("Item added to cart successfully!");
+        toast.success("Item added to cart successfully!", {
+          autoClose:3000, // Duration in milliseconds
+        });
           }
       } catch (error) {
         console.error("Error updating stock:", error.message);
@@ -168,7 +172,9 @@ const ProductDetails =  ({ data }) => {
       try {
         // await updateStockAfterOrderCreation(itemToUpdate);
         dispatch(addTocart(newData));
-        toast.success("Item added to cart successfully!");
+        toast.success("Item added to cart successfully!", {
+          autoClose:1000, // Duration in milliseconds
+        });
       } catch (error) {
         console.error("Error updating stock:", error.message);
         toast.error("Failed to add item to cart!");
@@ -431,32 +437,33 @@ const ProductDetails =  ({ data }) => {
                     <div
                       className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
                       onClick={() => {
-                        if (click) {
-                          removeFromWishlistHandler(data);
-                        } else {
-                          addToWishlistHandler(data);
+                        if (selectedSize === "") {
+                          toast.error("Please select a size!");
+                          return;
                         }
+                        const j1 = data.stock.find(
+                          (val) => val.size === selectedSize
+                        );
+                        console.log("object data", data);
+                        addToCartHandler2(data, selectedSize, count);
+                        setOpenCart(true); // Set the cart to open
+
+
                       }}
                     >
                       <span className="text-white flex items-center">
-                        Add to Wishlist
-                        {click ? (
-                          <AiFillHeart
+                        Buy Now
+                        
+                          <BsHandbag
                             size={20}
-                            color="red"
+                            color="white"
                             className="ml-2"
                             title="Remove from wishlist"
                           />
-                        ) : (
-                          <AiOutlineHeart
-                            size={24}
-                            color="white"
-                            className="ml-2"
-                            title="Add to wishlist"
-                          />
-                        )}
                       </span>
                     </div>
+                    {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
                   </div>
                 </div>
               </div>
@@ -487,32 +494,34 @@ const ProductDetails =  ({ data }) => {
                     <div
                       className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
                       onClick={() => {
-                        if (click) {
-                          removeFromWishlistHandler(data);
-                        } else {
-                          addToWishlistHandler(data);
+                        if (selectedSize === "") {
+                          toast.error("Please select a size!");
+                          return;
                         }
+                        const j1 = data.stock.find(
+                          (val) => val.size === selectedSize
+                        );
+                        console.log("object data", data);
+                        addToCartHandler2(data, selectedSize, count);
+                        setOpenCart(true); // Set the cart to open
+
+
                       }}
                     >
                       <span className="text-white flex items-center">
-                        Add to Wishlist
-                        {click ? (
-                          <AiFillHeart
+                        Buy Now
+                        
+                          <BsHandbag
                             size={20}
-                            color="red"
+                            color="white"
                             className="ml-2"
                             title="Remove from wishlist"
                           />
-                        ) : (
-                          <AiOutlineHeart
-                            size={24}
-                            color="white"
-                            className="ml-2"
-                            title="Add to wishlist"
-                          />
-                        )}
+                         
                       </span>
                     </div>
+                    {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
                   </div>
                 </div>
 

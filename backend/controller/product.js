@@ -178,7 +178,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const perPage = parseInt(req.query.perPage) || 20; // Adjust as needed
+      const perPage = parseInt(req.query.perPage) || 40; // Adjust as needed
 
       let sortBy = "";
       let sortOrder = -1;
@@ -320,7 +320,7 @@ router.get(
         "when", "where", "why", "how", "all", "any", "both", "each", "few", "more",
         "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so",
         "than", "too", "very", "s", "t", "can", "will", "just", "don", "should",
-        "now"
+        "now","xy"
       ];
       
       words = words.filter(word => !stopWords.includes(word.toLowerCase()));

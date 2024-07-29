@@ -31,7 +31,6 @@ import {
 } from "../static/data"; // Assuming data is imported correctly
 import ClipLoader from "react-spinners/ClipLoader";
 import BasicPagination from "./BasicPagination";
-import SortFilterButtons from "./SortFilterButtons";
 
 const SearchResults = () => {
   const { query } = useParams();
