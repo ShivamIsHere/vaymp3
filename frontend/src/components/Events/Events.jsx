@@ -16,26 +16,24 @@ const Events = () => {
   return (
     <div>
       {isLoading ? (
-       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-       <Oval color="#00BFFF" height={80} width={80} />
-     </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <Oval color="#00BFFF" height={80} width={80} />
+        </div>
       ) : (
-        <div className={styles.section}>
-          <div className={styles.heading}>
-            <h1>Popular Events</h1>
-          </div>
-          <div className="flex overflow-x-auto space-x-4 snap-x snap-mandatory hide-scrollbar">
-            {allEvents && allEvents.length !== 0 ? (
-              allEvents.map((event) => (
+        allEvents && allEvents.length !== 0 && (
+          <div className={styles.section}>
+            <div className={styles.heading}>
+              <h1>Popular Events</h1>
+            </div>
+            <div className="flex overflow-x-auto space-x-4 snap-x snap-mandatory hide-scrollbar">
+              {allEvents.map((event) => (
                 <div className="snap-center shrink-0 w-full md:w-1/2" key={event._id}>
                   <EventCard data={event} />
                 </div>
-              ))
-            ) : (
-              <h4>No Events available!</h4>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )
       )}
     </div>
   );
