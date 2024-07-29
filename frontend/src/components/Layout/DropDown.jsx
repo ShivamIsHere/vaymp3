@@ -12,7 +12,7 @@ const DropDown = ({ categoriesData, setDropDown }) => {
   }else if(i.title==="Shoes"){
     navigate(`/search/shoes?page=1`);
   }else if(i.title==="Accessories"){
-    navigate(`/search/accessories?page=1`);
+    navigate(`/coming-soon`);
 
   }    
   setDropDown(false);

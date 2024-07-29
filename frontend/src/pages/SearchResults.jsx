@@ -10,7 +10,7 @@ import axios from "axios";
 import { server } from "../server";
 import { useMediaQuery } from 'react-responsive';
 import { BiSortAlt2 } from 'react-icons/bi';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter,FaBoxOpen, FaSadTear, FaSearch } from 'react-icons/fa';
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap  } from "react-icons/ai";
 import {
   categoriesData,
@@ -493,14 +493,27 @@ console.log("hfejshmehgmfe,")
         <div className="w-full">
           <Header activeHeading={2} />
           <div className={`${styles.section}`}>
-          {totalPage === 0 && (
-              <h1 className="text-center text-xl font-semibold text-gray-700 mt-4 mb-1">
-                No Product Found
-              </h1>
+          {/* {totalPage === 0 && (
+              <div className="flex items-center justify-center min-h-[80vh] bg-gradient-to-r from-blue-100 to-blue-300 p-6 sm:p-12">
+              <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-lg w-full">
+                <div className="mx-auto mb-6 w-32 h-32 flex items-center justify-center text-blue-600">
+                  <FaBoxOpen size={64} />
+                </div>
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">No Products Found</h1>
+                <p className="text-lg sm:text-xl text-gray-600 mb-6">
+                  Sorry, we couldn't find any products that match your search.
+                </p>
+                <div className="flex justify-center space-x-4 text-blue-600">
+                  <FaSadTear size={32} />
+                  <FaSearch size={32} />
+                </div>
+              </div>
+            </div>
 
-            )}{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
+            )} */}
+            {/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
-            <h1 className="text-xl font-semibold mb-4">Search Results for: {query}</h1>
+            {totalPage !== 0 &&<h1 className="text-xl font-semibold mb-4">Search Results for: {query}</h1>}
 
          {/* <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around items-center border-t border-gray-200">
          <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded "    onClick={toggleDrawer}>
@@ -517,7 +530,7 @@ console.log("hfejshmehgmfe,")
       <div className="flex flex-col lg:flex-row">
           {/* Add your filters and sorting here */}
         </div>
-            {isValid===true&&<div className="lg:hidden sticky z-20">
+            {isValid===true&&filteredDatas.length !== 0&&<div className="lg:hidden sticky z-20">
               {/* <div className="w-1/2 p-0 m-0">
                 <button
                   className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
@@ -554,7 +567,7 @@ console.log("hfejshmehgmfe,")
             {/* for larger screen */}
 
     
-            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 justify-between items-center"
+            {isValid===true&&filteredDatas.length !== 0&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 justify-between items-center"
               style={{ zIndex: 1 }}
             >
               <h4 className="text-4xl font-semibold text-gray-700 hidden lg:block">New Arrivals</h4>
@@ -965,8 +978,22 @@ console.log("hfejshmehgmfe,")
             </div>
             {getAllProducts().length === 0 ? (
               // <div className="text-center text-gray-500 mt-4">No products found</div>
-              <div className="flex justify-center items-center lg:hidden">
-              <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+              <div className="flex justify-center bg-zinc-100 items-center lg:hidden">
+           <div className="flex items-center justify-center min-h-[80vh] bg-gradient-to-r from-blue-100 to-blue-300 p-6 sm:p-12">
+              <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-lg w-full">
+                <div className="mx-auto mb-6 w-32 h-32 flex items-center justify-center text-blue-600">
+                  <FaBoxOpen size={64} />
+                </div>
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">No Products Found</h1>
+                <p className="text-lg sm:text-xl text-gray-600 mb-6">
+                  Sorry, we couldn't find any products that match your search.
+                </p>
+                <div className="flex justify-center space-x-4 text-blue-600">
+                  <FaSadTear size={32} />
+                  <FaSearch size={32} />
+                </div>
+              </div>
+            </div>            
             </div>
             ) : (
               <>
@@ -984,8 +1011,22 @@ console.log("hfejshmehgmfe,")
             )}
             {filteredDatas.length === 0 ? (
               // <div className="text-center text-gray-500 mt-4">No products found</div>
-              <div className=" hidden lg:flex justify-center items-center">
-              <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+              <div className="bg-zinc-100 hidden lg:flex justify-center items-center">
+<div className="flex items-center justify-center min-h-[80vh] bg-gradient-to-r from-blue-100 to-blue-300 p-6 sm:p-12">
+              <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-lg w-full">
+                <div className="mx-auto mb-6 w-32 h-32 flex items-center justify-center text-blue-600">
+                  <FaBoxOpen size={64} />
+                </div>
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">No Products Found</h1>
+                <p className="text-lg sm:text-xl text-gray-600 mb-6">
+                  Sorry, we couldn't find any products that match your search.
+                </p>
+                <div className="flex justify-center space-x-4 text-blue-600">
+                  <FaSadTear size={32} />
+                  <FaSearch size={32} />
+                </div>
+              </div>
+            </div>
             </div>
             ): (
               <>
@@ -1011,9 +1052,9 @@ console.log("hfejshmehgmfe,")
           {/* Pagination for Large Screens */}
             <div className="flex flex-col flex-1 p-4">
         
-        <div className="mt-4 justify-center hidden lg:flex">
+        {filteredDatas.length !== 0 &&<div className="mt-4 justify-center hidden lg:flex">
           <BasicPagination count={totalPages} page={currentPage} onChange={handlePageChange} />
-        </div>
+        </div>}
       </div>
     </div>
           {/* Sort Drawer */}

@@ -14,6 +14,7 @@ import CheckoutPage from "../pages/CheckoutPage";
 import PaymentPage from "../pages/PaymentPage";
 import OrderSuccessPage from "../pages/OrderSuccessPage";
 import ProductDetailsPage from "../pages/ProductDetailsPage";
+import ComingSoon from "../components/Layout/ComingSoon.jsx";
 import ProfilePage from "../pages/ProfilePage";
 import ShopCreatePage from "../pages/ShopCreate";
 import SellerActivationPage from "../pages/SellerActivationPage";
@@ -45,6 +46,7 @@ export {
     PaymentPage,
     OrderSuccessPage,
     ProductDetailsPage,
+    ComingSoon,
     ProfilePage,
     AllRefundOrders,
     TrackOrderr,

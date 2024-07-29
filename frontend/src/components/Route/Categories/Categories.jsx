@@ -40,7 +40,7 @@ const Categories = () => {
           }else if(i.title==="Shoes"){
             navigate(`/search/shoes?page=1`);
           }else if(i.title==="Accessories"){
-            navigate(`/search/accessories?page=1`);
+            navigate(`/coming-soon`);
 
           }
           };
@@ -92,7 +92,7 @@ const Categories = () => {
                 }else if(item.title==="Shoes"){
                   navigate(`/search/shoes?page=1`);
                 }else if(item.title==="Accessories"){
-                  navigate(`/search/accessories?page=1`);
+                  navigate(`/coming-soon`);
       
                 }}}>
                   <div className="overflow-hidden relative">

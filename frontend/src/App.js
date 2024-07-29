@@ -85,6 +85,7 @@ import Cart from "./components/cart/Cart.jsx";
 import ScrollRestoration from "./components/Layout/ScrollRestoration.jsx";
 import Wishlist from "./components/Wishlist/Wishlist.jsx";
 import Categories from "./components/Route/Categories/Categories.jsx";
+import ComingSoon from "./components/Layout/ComingSoon.jsx";
 // import AllOrders from "./pages/AllOrders.jsx";
 
 const App = () => {
@@ -120,6 +121,7 @@ const App = () => {
         </Elements>
       )}
       <Routes>
+
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -129,6 +131,8 @@ const App = () => {
           path="/activation/:activation_token"
           element={<ActivationPage />}
         />
+        <Route path="/coming-soon" element={<ComingSoon/>} />
+
         <Route
           path="/seller/activation/:activation_token"
           element={<SellerActivationPage />}
