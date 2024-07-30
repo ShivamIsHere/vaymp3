@@ -43,6 +43,8 @@ import {
   ShopPreviewPageForShop,
   ShopAllOrders,
   ShopOrderDetails,
+  ShopSuccessfulRefunds,
+  ShopProcessingRefunds,
   ShopAllRefunds,
   ShopSettingsPage,
   ShopWithDrawMoneyPage,
@@ -308,7 +310,25 @@ const App = () => {
             </SellerProtectedRoute>
           }
         />
+        
 
+        <Route
+          path="/dashboard-successful-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopSuccessfulRefunds />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-Processing-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopProcessingRefunds />
+            </SellerProtectedRoute>
+          }
+        />
+        
         <Route
           path="/order/:id"
           element={

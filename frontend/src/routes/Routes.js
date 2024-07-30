@@ -25,6 +25,8 @@ import UserInbox from "../pages/UserInbox.jsx";
 import AllOrders from "../pages/AllOrders.jsx";
 import Address from "../pages/Address.jsx";
 import AllRefundOrders from "../pages/AllRefundOrders.jsx";
+import SuccessfulRefunds from "../components/Shop/SuccessfulRefunds.jsx";
+import ProcessingRefunds from "../components/Shop/ProcessingRefunds.jsx";
 import TrackOrderr from "../pages/TrackOrderr.jsx";
 import ShopForgotPassword from "../components/Shop/ShopForgotPassword.jsx";
 import ShopResetPassword from "../components/Shop/ShopResetPassword.jsx";
@@ -40,6 +42,8 @@ export {
     HomePage,
     ProductsPage,
     // BestSellingPage,
+    SuccessfulRefunds,
+    ProcessingRefunds,
     EventsPage,
     FAQPage,
     CheckoutPage,

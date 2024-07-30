@@ -163,7 +163,7 @@ router.get(
           if (delivered) {
             seller.availableBalance += kuchvi.shopPrice;
             product.sold_out +=1;
-            kuchvi.deliveredAt = Date.now;
+            kuchvi.deliveredAt = Date.now();
           }
         }
         if (return1 !== undefined) kuchvi.return1 = return1;
@@ -172,7 +172,7 @@ router.get(
           if (refundStatus) {
             seller.availableBalance -= kuchvi.shopPrice;
             product.sold_out -=1;
-            kuchvi.returnedAt = Date.now;
+            kuchvi.returnedAt = Date.now();
           }
         }
         if (paymentInfo !== undefined) kuchvi.paymentInfo = paymentInfo;
@@ -194,6 +194,32 @@ router.get(
       }
     })
   );
-
+  router.get(
+    "/get-return-requests",
+    // isAuthenticated,
+    isSeller,
+    catchAsyncErrors(async (req, res, next) => {
+      console.log("2222222222",req.seller._id)
+      try {
+        // Debugging logs to verify req.seller._id
+        console.log("2222222222", req.seller._id);
+  
+        const shopId = req.seller._id;
+  
+        // Fetch return requests with status "Return Request" for the specific shop
+        const returnRequests = await Kuchvi.find({
+          status: "Return Request",
+          shopId: shopId, // Filter by shop ID
+        }).sort({ createdAt: -1 }); // Sorting by creation date, adjust as needed
+  
+        res.status(200).json({
+          success: true,
+          returnRequests,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
+    })
+  );
   
 module.exports = router;

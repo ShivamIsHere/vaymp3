@@ -9,6 +9,14 @@ const withdrawSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  upiId: {
+    type: String,
+    // required: true,
+  },
+  number: {
+    type: String,
+    // required: true,
+  },
   status: {
     type: String,
     default: "Processing",
@@ -17,7 +25,7 @@ const withdrawSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  updatedAt:{
+  updatedAt: {
     type: Date,
   }
 });

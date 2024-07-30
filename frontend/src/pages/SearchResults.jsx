@@ -513,7 +513,13 @@ console.log("hfejshmehgmfe,")
             )} */}
             {/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
-            {totalPage !== 0 &&<h1 className="text-xl font-semibold mb-4">Search Results for: {query}</h1>}
+            {totalPage !== 0 && (
+  <h1 className="text-2xl sm:text-3xl font-normal text-gray-800 mb-2 ml-2 ">
+    Search Results for: <span className="text-blue-600">{query}</span>
+  </h1>
+)}
+
+
 
          {/* <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around items-center border-t border-gray-200">
          <button className="flex flex-row items-center space-x-2 p-2 hover:bg-gray-100 rounded "    onClick={toggleDrawer}>

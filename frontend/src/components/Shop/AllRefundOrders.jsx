@@ -1,103 +1,74 @@
-import { Button } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Loader from "../Layout/Loader";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { server } from "../../server"; // Adjust the path as needed
 
 const AllRefundOrders = () => {
-  const { orders, isLoading } = useSelector((state) => state.order);
+  const [returnRequests, setReturnRequests] = useState([]);
   const { seller } = useSelector((state) => state.seller);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    const fetchReturnRequests = async () => {
+      try {
+        const { data } = await axios.get(`${server}/kuchvi/get-return-requests`, {
+          withCredentials: true,
+        });
 
-  const refundOrders = orders && orders.filter((item) => item.status === "Processing refund"  || item.status === "Refund Success");
+        if (data.success) {
+          setReturnRequests(data.returnRequests);
+        }
+      } catch (error) {
+        console.error("Error fetching return requests:", error);
+      }
+    };
 
-  const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty8",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-  ];
-
-  const row = [];
-
-  refundOrders &&
-  refundOrders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.cart.length,
-        total: "Rs. " + item.totalPrice,
-        status: item.status,
-      });
-    });
+    if (seller && seller._id) {
+      fetchReturnRequests();
+    }
+  }, [seller._id]);
 
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <DataGrid
-            rows={row}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            autoHeight
-          />
-        </div>
-      )}
-    </>
+    <div className="w-full p-8">
+      <h3 className="text-[22px] font-Poppins mb-4">Return Requests</h3>
+      <div className="bg-white shadow rounded p-4">
+        {returnRequests.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {returnRequests.map((request) => (
+              <div key={request._id} className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                <img src={request.img} alt={request.productName} className="w-full h-32 object-cover mb-4 rounded"/>
+                <div className="mb-2">
+                  <p className="font-semibold text-lg text-gray-800">
+                    Product: <span className="font-normal">{request.productName}</span>
+                  </p>
+                  <p className="font-semibold text-lg text-gray-800">
+                    Size: <span className="font-normal">{request.size}</span>
+                  </p>
+                  <p className="font-semibold text-lg text-gray-800">
+                    Quantity: <span className="font-normal">{request.qty}</span>
+                  </p>
+                  <p className="font-semibold text-lg text-gray-800">
+                    Status: <span className="font-normal">{request.status}</span>
+                  </p>
+                </div>
+                <div className="mb-2">
+                  <p className="font-semibold text-lg text-gray-800">
+                    Shop Price: <span className="font-normal">Rs{request.shopPrice}</span>
+                  </p>
+                </div>
+                <div className="mb-2">
+                  
+                  <p className="font-semibold text-lg text-gray-800">
+                    Return Request: <span className="font-normal">{request.return1 ? "Yes" : "No"}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-700">No return requests found.</p>
+        )}
+      </div>
+    </div>
   );
 };
 

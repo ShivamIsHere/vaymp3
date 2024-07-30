@@ -670,7 +670,7 @@ words = words.filter(keyword => {
             if (range === "3-and-below") {
               return product.ratings <= 3;
             } else if (range === "3-to-4") {
-              return product.ratings >= 3 && product.ratings <= 4;
+              return product.ratings >= 3
             } else if (range === "4-and-above") {
               return product.ratings >= 4;
             }
