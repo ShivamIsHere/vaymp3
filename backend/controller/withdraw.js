@@ -148,7 +148,7 @@ router.get(
       const refunds = await Withdraw.find({
         "seller._id": req.seller._id,
         status: "Processing",
-      }).sort({ createdAt: -1 });
+      }).sort({ updatedAt: -1 });
 
       res.status(200).json({
         success: true,
